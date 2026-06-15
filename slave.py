@@ -26,14 +26,14 @@ class SlaveBot(Client):
     user: ClientUser
     INTENTS = Intents.default()
     INTENTS.message_content = True
-    sekai = SekaiManager()
 
     def __init__(self) -> None:
         super().__init__(
-            intents=INTENTS,
+            chunk_guilds_at_startup=False,
             max_ratelimit_timeout=30.0,
-            chunk_guilds_at_startup=False
+            intents=self.INTENTS
         )
+        self.sekai = SekaiManager()
 
     async def on_message(self, message: Message) -> None:
         await self.sekai.update_room_code(message)
