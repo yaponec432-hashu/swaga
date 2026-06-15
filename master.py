@@ -115,19 +115,18 @@ class SekaiManager:
 
 
 class LayoutTranslator:
-    def __init__(self) -> None:
-        self.qwerty = (
-            "qwertyuiop[]asdfghjkl;'zxcvbnm,./"
-            "QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?"
-        )
-        self.russian = (
-            "йцукенгшщзхъфывапролджэячсмитьбю."
-            "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"
-        )
-        self.translate_table = str.maketrans(self.qwerty, self.russian)
+    QWERTY = (
+        "qwertyuiop[]asdfghjkl;'zxcvbnm,./"
+        'QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?'
+    )
+    RUSSIAN = (
+        "йцукенгшщзхъфывапролджэячсмитьбю."
+        "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"
+    )
+    TRANSLATION_TABLE = str.maketrans(self.QWERTY, self.RUSSIAN)
 
     def translate(self, text: str) -> str:
-        return text.translate(self.translate_table)
+        return text.translate(self.TRANSLATION_TABLE)
 
 
 bot = MasterBot()
