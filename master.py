@@ -28,24 +28,23 @@ from discord import (
 
 class MasterBot(Client):
     user: ClientUser
+    SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
+    INTENTS = Intents.default()
+    INTENTS.message_content = True
+    sekai = SekaiManager()
 
     def __init__(self) -> None:
-        activity = Game("трахает робонене")
-        intents = Intents.default()
-        intents.message_content = True
         super().__init__(
-            intents=intents,
-            activity=activity,
+            intents=INTENTS,
             max_ratelimit_timeout=30.0,
-            chunk_guilds_at_startup=False)
+            chunk_guilds_at_startup=False
+        )
         self.tree = app_commands.CommandTree(self)
-        self.sync_enabled = int(environ["BOT_SYNC_ENABLED"])
-        self.sekai = SekaiManager()
 
     async def setup_hook(self) -> None:
         with open("master_id", "w") as file:
-            file.write(f"{self.user.id}\n")
-        if self.sync_enabled:
+            file.write(str(self.user.id) + "\n")
+        if self.SYNC_ENABLED:
             await self.tree.sync()
 
     async def on_message(self, message: Message) -> None:
@@ -53,41 +52,33 @@ class MasterBot(Client):
 
 
 class SekaiManager:
-    def __init__(self) -> None:
-        self.channel_name_len = 8
-        self.room_code_len = 5
-        self.room_letter = "g"
-        self.manager_roles = {
-            "Раннер ростера",
-            "Лид-менеджер",
-            "Менеджер",
-            "Интерн"
-        }
+    MANAGER_ROLES = {"Раннер ростера", "Лид-менеджер", "Менеджер", "Интерн"}
+    CHANNEL_NAME_LEN = 8
+    MASTER_LETTER = "z"
+    ROOM_CODE_LEN = 5
+    ROOM_LETTER = "g"
 
-    def is_human_in_text_channel(
-        self,
-        author: Member,
-        channel: Messageable
-    ) -> bool:
+    @staticmethod
+    def is_human_in_text_channel(author: Member, channel: Messageable) -> bool:
         return not author.bot and isinstance(channel, TextChannel)
 
     def is_sekai_code(self, text: str) -> bool:
-        return len(text) == self.room_code_len and text.isdecimal()
+        return len(text) == self.ROOM_CODE_LEN and text.isdecimal()
 
     def is_manager(self, author: Member) -> bool:
-        return any(role.name in self.manager_roles for role in author.roles)
+        return any(role.name in self.MANAGER_ROLES for role in author.roles)
 
     def get_room_prefix(self, channel_name: str) -> str:
-        if len(channel_name) != self.channel_name_len:
+        if len(channel_name) != self.CHANNEL_NAME_LEN:
             return ""
-        if channel_name[0] != self.room_letter:
+        if channel_name[0] != self.ROOM_LETTER:
             return ""
         if channel_name[2] != "-":
             return ""
         room_number = channel_name[1]
         if not room_number.isdecimal():
             return ""
-        return f"{self.room_letter}{room_number}-"
+        return f"{self.ROOM_LETTER}{room_number}-"
 
     async def update_room_code(self, message: Message) -> None:
         """Highlight the sekai room code."""
@@ -99,7 +90,7 @@ class SekaiManager:
         if not self.is_sekai_code(message_text):
             return
         channel_name = channel.name
-        if message_text == channel_name[-self.room_code_len:]:
+        if message_text == channel_name[-self.ROOM_CODE_LEN:]:
             return
         room_prefix = self.get_room_prefix(channel_name)
         if not room_prefix:
@@ -114,7 +105,7 @@ class SekaiManager:
             async with channel.typing():
                 await wait_for(channel.edit(name=name), timeout=2.0)
         except (TimeoutError, RateLimited, HTTPException):
-            content = "z" + name
+            content = self.MASTER_LETTER + name
         except Forbidden:
             description = "**У меня нет прав** на управление каналами"
             color = Color.red()
