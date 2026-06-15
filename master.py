@@ -195,7 +195,7 @@ async def length(ctx: Interaction, text: str) -> None:
 
 @bot.tree.command(description="Проверить синхронизацию")
 async def check_sync(ctx: Interaction) -> None:
-    description = "Ага" if bot.sync_enabled else "Нет нихуя"
+    description = "Ага" if bot.SYNC_ENABLED else "Нет нихуя"
     embed = Embed(description=description, color=Color.green())
     await ctx.response.send_message(embed=embed)
 
