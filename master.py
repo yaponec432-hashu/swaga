@@ -31,15 +31,15 @@ class MasterBot(Client):
     SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
     INTENTS = Intents.default()
     INTENTS.message_content = True
-    sekai = SekaiManager()
 
     def __init__(self) -> None:
         super().__init__(
-            intents=INTENTS,
+            intents=self.INTENTS,
             max_ratelimit_timeout=30.0,
             chunk_guilds_at_startup=False
         )
         self.tree = app_commands.CommandTree(self)
+        self.sekai = SekaiManager()
 
     async def setup_hook(self) -> None:
         with open("master_id", "w") as file:
