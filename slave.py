@@ -24,29 +24,28 @@ from discord import (
 
 class SlaveBot(Client):
     user: ClientUser
+    INTENTS = Intents.default()
+    INTENTS.message_content = True
+    sekai = SekaiManager()
 
     def __init__(self) -> None:
-        activity = Game("я робот долбаеб")
-        intents = Intents.default()
-        intents.message_content = True
         super().__init__(
-            intents=intents,
-            activity=activity,
+            intents=INTENTS,
             max_ratelimit_timeout=30.0,
-            chunk_guilds_at_startup=False)
-        self.sekai = SekaiManager()
+            chunk_guilds_at_startup=False
+        )
 
     async def on_message(self, message: Message) -> None:
         await self.sekai.update_room_code(message)
 
 
 class SekaiManager:
-    def __init__(self) -> None:
-        self.master_id = int(environ["MASTER_ID"])
-        self.room_code_len = 5
+    MASTER_ID = int(environ["MASTER_ID"])
+    MASTER_LETTER = "z"
+    ROOM_CODE_LEN = 5
 
     def is_master(self, author: Member) -> bool:
-        return author.bot and author.id == self.master_id
+        return author.bot and author.id == self.MASTER_ID
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
@@ -55,13 +54,13 @@ class SekaiManager:
         message_text = message.content
         if not message_text:
             return
-        if message_text[0] != "z":
+        if message_text[0] != self.MASTER_LETTER:
             return
         channel = message.channel
         name = message_text[1:]
         if name == channel.name:
             return
-        new_room_code = name[-self.room_code_len:]
+        new_room_code = name[-self.ROOM_CODE_LEN:]
         content = embed = None
         try:
             description = f"# `{new_room_code}`\nНовый код румы"
