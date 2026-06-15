@@ -4,11 +4,11 @@
 set -e
 
 get_master_id() {
-    local master_id_file='./master_id'
-    until [[ -s "${master_id_file}" ]]; do
-        sleep 0.1
+    for i in {0..60}; do
+        [[ -s "${master_id_file}" ]] && break
+        sleep 1
     done
-    cat "${master_id_file}"
+    cat ./master_id
 }
 
 main() {
