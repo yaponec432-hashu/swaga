@@ -12,7 +12,6 @@ from discord import (
     Client,
     Embed,
     Color,
-    Game,
     ClientUser,
     Message,
     Member,
