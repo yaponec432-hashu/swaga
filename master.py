@@ -14,7 +14,6 @@ from discord import (
     Client,
     Embed,
     Color,
-    Game,
     Interaction,
     TextChannel,
     ClientUser,
