@@ -34,9 +34,9 @@ class MasterBot(Client):
 
     def __init__(self) -> None:
         super().__init__(
-            intents=self.INTENTS,
+            chunk_guilds_at_startup=False,
             max_ratelimit_timeout=30.0,
-            chunk_guilds_at_startup=False
+            intents=self.INTENTS
         )
         self.tree = app_commands.CommandTree(self)
         self.sekai = SekaiManager()
