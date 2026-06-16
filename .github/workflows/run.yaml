@@ -28,10 +28,6 @@ jobs:
       - name: Run the bots
         run: |
           uv run ./master.py &
-          for i in {0..30}; do
-            [[ -s ./master_data ]] && break
-            sleep 1
-          done
           uv run ./slave.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
