@@ -4,6 +4,7 @@
 
 from logging import basicConfig, ERROR
 from asyncio import wait_for, Runner
+from time import sleep
 from os import environ
 
 from uvloop import new_event_loop
@@ -33,36 +34,38 @@ class SlaveBot(Client):
 
 
 class SekaiManager:
-    def __init__(self) -> None:
-        with open("master_data", "r") as file:
-            master_data = file.read().split()
-        for i, item in enumerate(master_data):
-            if item.isdecimal():
-                master_data[i] = int(item)
-        (
-            self.master_id,
-            self.master_letter,
-            self.room_letter,
-            self.room_code_len
-        ) = master_data
+    error = FileNotFoundError
+    master_data = []
+    for _ in range(30):
+        try:
+            with open("master_data", "r") as file:
+                master_data += file.read().split()
+        except error:
+            sleep(1)
+        if master_data:
+            break
+    if not master_data:
+        raise error
+    MASTER_ID, MASTER_LETTER, ROOM_CODE_LEN = master_data
+    MASTER_ID = int(MASTER_ID)
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
         author = message.author
         if not author.bot:
             return
-        if author.id != self.master_id:
+        if author.id != self.MASTER_ID:
             return
         message_text = message.content
         if not message_text:
             return
-        if message_text[0] != self.master_letter:
+        if message_text[0] != self.MASTER_LETTER:
             return
         channel = message.channel
         name = message_text[1:]
         if name == channel.name:
             return
-        new_room_code = name[-self.room_code_len:]
+        new_room_code = name[-self.ROOM_CODE_LEN:]
         content = embed = None
         try:
             description = f"# `{new_room_code}`\nНовый код румы"
