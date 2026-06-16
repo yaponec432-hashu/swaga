@@ -36,7 +36,7 @@ class MasterBot(Client):
 
     async def setup_hook(self) -> None:
         master_data = (
-            str(self.MASTER_ID)
+            str(self.user.id)
             + f" {self.sekai.MASTER_LETTER}"
             + f" {self.sekai.ROOM_LETTER}"
             + f" {self.sekai.ROOM_CODE_LEN}"
