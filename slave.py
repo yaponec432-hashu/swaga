@@ -26,10 +26,7 @@ class SlaveBot(Client):
     INTENTS.message_content = True
 
     def __init__(self) -> None:
-        super().__init__(
-            chunk_guilds_at_startup=False,
-            intents=self.INTENTS
-        )
+        super().__init__(chunk_guilds_at_startup=False, intents=self.INTENTS)
         self.sekai = SekaiManager()
 
     async def on_message(self, message: Message) -> None:
