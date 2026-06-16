@@ -41,8 +41,9 @@ class MasterBot(Client):
         self.sekai = SekaiManager()
 
     async def setup_hook(self) -> None:
-        with open("master_id", "w") as file:
-            file.write(f"{self.sekai.MASTER_LETTER}{self.user.id}\n")
+        master_data = f"{self.sekai.MASTER_LETTER}{self.user.id}\n"
+        with open("master_data", "w") as file:
+            file.write(master_data)
         if self.SYNC_ENABLED:
             await self.tree.sync()
 
@@ -56,10 +57,6 @@ class SekaiManager:
     MASTER_LETTER = "z"
     ROOM_CODE_LEN = 5
     ROOM_LETTER = "g"
-
-    @staticmethod
-    def is_human_in_text_channel(author: Member, channel: Messageable) -> bool:
-        return not author.bot and isinstance(channel, TextChannel)
 
     def is_sekai_code(self, text: str) -> bool:
         return len(text) == self.ROOM_CODE_LEN and text.isdecimal()
@@ -82,8 +79,10 @@ class SekaiManager:
     async def update_room_code(self, message: Message) -> None:
         """Highlight the sekai room code."""
         channel = message.channel
+        if not isinstance(channel, TextChannel):
+            return
         author = message.author
-        if not self.is_human_in_text_channel(author, channel):
+        if author.bot:
             return
         message_text = message.content
         if not self.is_sekai_code(message_text):
