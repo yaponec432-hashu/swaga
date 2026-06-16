@@ -34,20 +34,25 @@ class SlaveBot(Client):
 
 
 class SekaiManager:
-    error = FileNotFoundError
-    master_data = []
-    for _ in range(30):
-        try:
-            with open("master_data", "r") as file:
-                master_data += file.read().split()
-        except error:
-            sleep(1)
-        if master_data:
-            break
-    if not master_data:
-        raise error
-    MASTER_ID, MASTER_LETTER, ROOM_CODE_LEN = master_data
-    MASTER_ID = int(MASTER_ID)
+    def __init__(self) -> None:
+        error = FileNotFoundError
+        master_data = []
+        for _ in range(30):
+            try:
+                with open("master_data", "r") as file:
+                    master_data += file.read().split()
+            except error:
+                sleep(1)
+            if master_data:
+                break
+        if not master_data:
+            raise error
+        (
+            master_id,
+            self.master_letter,
+            self.room_code_len
+        ) = master_data
+        self.master_id = int(master_id)
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
