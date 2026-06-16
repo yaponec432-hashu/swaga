@@ -6,7 +6,6 @@ from logging import basicConfig, ERROR
 from asyncio import wait_for, Runner
 from os import environ
 
-from discord.abc import Messageable
 from uvloop import new_event_loop
 from discord import (
     app_commands,
@@ -20,7 +19,6 @@ from discord import (
     Message,
     Member,
     HTTPException,
-    RateLimited,
     Forbidden
 )
 
@@ -32,18 +30,19 @@ class MasterBot(Client):
     INTENTS.message_content = True
 
     def __init__(self) -> None:
-        super().__init__(
-            chunk_guilds_at_startup=False,
-            max_ratelimit_timeout=30.0,
-            intents=self.INTENTS
-        )
+        super().__init__(chunk_guilds_at_startup=False, intents=self.INTENTS)
         self.tree = app_commands.CommandTree(self)
         self.sekai = SekaiManager()
 
     async def setup_hook(self) -> None:
-        master_data = f"{self.sekai.MASTER_LETTER}{self.user.id}\n"
+        master_data = (
+            str(self.MASTER_ID)
+            + f" {self.MASTER_LETTER}"
+            + f" {self.ROOM_LETTER}"
+            + f" {self.ROOM_CODE_LEN}"
+        )
         with open("master_data", "w") as file:
-            file.write(master_data)
+            file.write(master_data + "\n")
         if self.SYNC_ENABLED:
             await self.tree.sync()
 
