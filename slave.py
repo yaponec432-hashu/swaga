@@ -35,13 +35,16 @@ class SlaveBot(Client):
 class SekaiManager:
     def __init__(self) -> None:
         with open("master_data", "r") as file:
-            master_data = file.read()
+            master_data = file.read().split()
+        for i, item in enumerate(master_data):
+            if item.isdigit():
+                master_data[i] = int(item)
         (
             self.master_id,
             self.master_letter,
             self.room_letter
             self.room_code_len
-        ) = master_data.split()
+        ) = master_data
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
