@@ -37,7 +37,7 @@ class SekaiManager:
         with open("master_data", "r") as file:
             master_data = file.read().split()
         for i, item in enumerate(master_data):
-            if item.isdigit():
+            if item.isdecimal():
                 master_data[i] = int(item)
         (
             self.master_id,
