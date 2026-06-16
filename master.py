@@ -42,7 +42,7 @@ class MasterBot(Client):
 
     async def setup_hook(self) -> None:
         with open("master_id", "w") as file:
-            file.write(str(self.user.id) + "\n")
+            file.write(f"{self.sekai.MASTER_LETTER}{self.user.id}\n")
         if self.SYNC_ENABLED:
             await self.tree.sync()
 
@@ -161,9 +161,7 @@ async def translate_from_crystalian(
 @app_commands.describe(item="Докс сват спортики")
 async def server_data(ctx: Interaction, item: str) -> None:
     data = getattr(ctx.guild, item)
-    content = (
-        f"```{data}```" if item == "id" else "> " + str(data.url)
-    )
+    content = f"```{data}```" if item == "id" else "> " + str(data)
     await ctx.response.send_message(content=content)
 
 
@@ -178,9 +176,7 @@ async def server_data(ctx: Interaction, item: str) -> None:
 @app_commands.describe(member="Чел", item="Докс сват спортики")
 async def member_data(ctx: Interaction, member: Member, item: str) -> None:
     data = getattr(member, item)
-    content = (
-        "> " + str(data.url) if item == "display_avatar" else f"```{data}```"
-    )
+    content = "> " + str(data) if item == "display_avatar" else f"```{data}```"
     await ctx.response.send_message(content=content)
 
 
