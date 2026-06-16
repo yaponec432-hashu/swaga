@@ -37,9 +37,9 @@ class MasterBot(Client):
     async def setup_hook(self) -> None:
         master_data = (
             str(self.MASTER_ID)
-            + f" {self.MASTER_LETTER}"
-            + f" {self.ROOM_LETTER}"
-            + f" {self.ROOM_CODE_LEN}"
+            + f" {self.sekai.MASTER_LETTER}"
+            + f" {self.sekai.ROOM_LETTER}"
+            + f" {self.sekai.ROOM_CODE_LEN}"
         )
         with open("master_data", "w") as file:
             file.write(master_data + "\n")
