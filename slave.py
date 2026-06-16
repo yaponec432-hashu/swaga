@@ -52,7 +52,7 @@ class SekaiManager:
         if not author.bot:
             return
         if author.id != self.master_id:
-            retuen
+            return
         message_text = message.content
         if not message_text:
             return
