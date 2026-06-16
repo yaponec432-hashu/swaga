@@ -42,7 +42,7 @@ class SekaiManager:
         (
             self.master_id,
             self.master_letter,
-            self.room_letter
+            self.room_letter,
             self.room_code_len
         ) = master_data
 
