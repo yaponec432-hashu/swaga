@@ -14,7 +14,6 @@ from discord import (
     Color,
     ClientUser,
     Message,
-    Member,
     HTTPException,
     Forbidden
 )
@@ -35,22 +34,22 @@ class SlaveBot(Client):
 
 class SekaiManager:
     def __init__(self) -> None:
-      with open("master_data", "r") as file:
-          master_data = file.read()
-      (
-          self.master_id,
-          self.master_letter,
-          self.room_letter
-          self.room_code_len
-      ) = master_data.split()
-
-    def is_master(self, author: Member) -> bool:
-        return author.bot and author.id == self.master_id
+        with open("master_data", "r") as file:
+            master_data = file.read()
+        (
+            self.master_id,
+            self.master_letter,
+            self.room_letter
+            self.room_code_len
+        ) = master_data.split()
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
-        if not self.is_master(message.author):
+        author = message.author
+        if not author.bot:
             return
+        if author.id != self.master_id:
+            retuen
         message_text = message.content
         if not message_text:
             return
@@ -67,7 +66,7 @@ class SekaiManager:
             color = Color.green()
             async with channel.typing():
                 await wait_for(channel.edit(name=name), timeout=2.0)
-        except (TimeoutError, RateLimited, HTTPException):
+        except (TimeoutError, HTTPException):
             content = (
                 "# :warning: Используй эту команду:"
                 f"\n```%rm {new_room_code}```"
