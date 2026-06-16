@@ -59,18 +59,18 @@ class SekaiManager:
         author = message.author
         if not author.bot:
             return
-        if author.id != self.MASTER_ID:
+        if author.id != self.master_id:
             return
         message_text = message.content
         if not message_text:
             return
-        if message_text[0] != self.MASTER_LETTER:
+        if message_text[0] != self.master_letter:
             return
         channel = message.channel
         name = message_text[1:]
         if name == channel.name:
             return
-        new_room_code = name[-self.ROOM_CODE_LEN:]
+        new_room_code = name[-self.room_code_len:]
         content = embed = None
         try:
             description = f"# `{new_room_code}`\nНовый код румы"
