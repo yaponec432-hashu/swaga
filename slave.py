@@ -16,7 +16,6 @@ from discord import (
     Message,
     Member,
     HTTPException,
-    RateLimited,
     Forbidden
 )
 
@@ -29,7 +28,6 @@ class SlaveBot(Client):
     def __init__(self) -> None:
         super().__init__(
             chunk_guilds_at_startup=False,
-            max_ratelimit_timeout=30.0,
             intents=self.INTENTS
         )
         self.sekai = SekaiManager()
@@ -39,12 +37,18 @@ class SlaveBot(Client):
 
 
 class SekaiManager:
-    MASTER_ID = int(environ["MASTER_ID"])
-    MASTER_LETTER = "z"
-    ROOM_CODE_LEN = 5
+    def __init__(self) -> None:
+      with open("master_data", "r") as file:
+          master_data = file.read()
+      (
+          self.master_id,
+          self.master_letter,
+          self.room_letter
+          self.room_code_len
+      ) = master_data.split()
 
     def is_master(self, author: Member) -> bool:
-        return author.bot and author.id == self.MASTER_ID
+        return author.bot and author.id == self.master_id
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
@@ -53,13 +57,13 @@ class SekaiManager:
         message_text = message.content
         if not message_text:
             return
-        if message_text[0] != self.MASTER_LETTER:
+        if message_text[0] != self.master_letter:
             return
         channel = message.channel
         name = message_text[1:]
         if name == channel.name:
             return
-        new_room_code = name[-self.ROOM_CODE_LEN:]
+        new_room_code = name[-self.room_code_len:]
         content = embed = None
         try:
             description = f"# `{new_room_code}`\nНовый код румы"
