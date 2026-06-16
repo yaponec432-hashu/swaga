@@ -38,7 +38,6 @@ class MasterBot(Client):
         master_data = (
             str(self.user.id)
             + f" {self.sekai.MASTER_LETTER}"
-            + f" {self.sekai.ROOM_LETTER}"
             + f" {self.sekai.ROOM_CODE_LEN}"
         )
         with open("master_data", "w") as file:
