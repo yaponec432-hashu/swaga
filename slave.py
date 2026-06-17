@@ -47,12 +47,14 @@ class SekaiManager:
                 break
         if not master_data:
             raise error
+        for i, item in enumerate(master_data):
+            if item.isdecimal():
+                master_data[i] = int(item)
         (
-            master_id,
+            self.master_id,
             self.master_letter,
             self.room_code_len
         ) = master_data
-        self.master_id = int(master_id)
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
