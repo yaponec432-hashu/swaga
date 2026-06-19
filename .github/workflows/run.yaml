@@ -1,7 +1,7 @@
 name: Run the bots
 on:
   schedule:
-    - cron: '39-44 23,2,5,8,11,14,17,20 * * *'
+    - cron: '41 23,2,5,8,11,14,17,20 * * *'
 
 concurrency:
   group: ${{ github.workflow }}
