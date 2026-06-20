@@ -106,7 +106,7 @@ class LayoutTranslator:
         "йцукенгшщзхъфывапролджэячсмитьбю."
         "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"
     )
-    TRANSLATION_TABLE = str.maketrans(QWERTY, RUSSIAN)
+    TRANSLATION_TABLE = "".maketrans(QWERTY, RUSSIAN)
 
     def translate(self, text: str) -> str:
         return text.translate(self.TRANSLATION_TABLE)
