@@ -70,7 +70,7 @@ class SekaiManager:
         if not self.is_room_code(message_text):
             return
         channel_name = channel.name.split(self.CHANNEL_NAME_SEPARATOR)
-        if len(channel_name) == 1:
+        if len(channel_name) <= 1:
             return
         current_room_code = channel_name[1]
         if not self.is_room_code(current_room_code):
