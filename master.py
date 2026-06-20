@@ -60,11 +60,11 @@ class SekaiManager:
 
     async def update_room_code(self, message: Message, bot_id: int) -> None:
         """Highlight the sekai room code."""
-        channel = message.channel
-        if not isinstance(channel, TextChannel):
-            return
         author = message.author
         if author.bot:
+            return
+        channel = message.channel
+        if not isinstance(channel, TextChannel):
             return
         message_text = message.content
         if not self.is_room_code(message_text):
@@ -73,9 +73,9 @@ class SekaiManager:
         if len(channel_name) == 1:
             return
         current_room_code = channel_name[1]
-        if current_room_code == message_text:
-            return
         if not self.is_room_code(current_room_code):
+            return
+        if current_room_code == message_text:
             return
         if not self.is_manager(author):
             return
