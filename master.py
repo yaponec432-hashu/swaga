@@ -58,7 +58,7 @@ class SekaiManager:
             return text.isdecimal() or text == self.CLOSED_ROOM_CODE
         return False
 
-    async def update_room_code(self, message: Message, bot_id) -> None:
+    async def update_room_code(self, message: Message, bot_id: int) -> None:
         """Highlight the sekai room code."""
         channel = message.channel
         if not isinstance(channel, TextChannel):
