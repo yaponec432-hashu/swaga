@@ -34,8 +34,6 @@ class SlaveBot(Client):
 
 
 class SekaiManager:
-    ROOM_CODE_LEN = 5
-
     def __init__(self) -> None:
         error = FileNotFoundError
         master_data = ""
@@ -59,8 +57,6 @@ class SekaiManager:
         if author.id != self.master_id:
             return
         message_text = message.content.split()
-        if not message_text:
-            return
         if len(message_text) == 1:
             return
         if int(message_text[0]) != self.master_id:
@@ -69,7 +65,7 @@ class SekaiManager:
         name = message_text[1]
         if name == channel.name:
             return
-        new_room_code = name[-self.ROOM_CODE_LEN:]
+        new_room_code = message_text[2]
         content = embed = None
         try:
             description = f"# `{new_room_code}`\nНовый код румы"
