@@ -36,7 +36,7 @@ class SlaveBot(Client):
 class SekaiManager:
     def __init__(self) -> None:
         error = FileNotFoundError
-        master_data = ""
+        master_id = ""
         for _ in range(30):
             try:
                 with open("master_id", "r") as file:
