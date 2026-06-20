@@ -88,7 +88,7 @@ class SekaiManager:
             async with channel.typing():
                 await wait_for(channel.edit(name=name), timeout=2.0)
         except (TimeoutError, HTTPException):
-            content = str(self.bot.user.id) + name
+            content = f"{self.bot.user.id} {name} {message_text}"
         except Forbidden:
             description = "**У меня нет прав** на управление каналами"
             color = Color.red()
