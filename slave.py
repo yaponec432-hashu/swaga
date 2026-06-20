@@ -52,8 +52,6 @@ class SekaiManager:
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
         author = message.author
-        if not author.bot:
-            return
         if author.id != self.master_id:
             return
         message_text = message.content.split()
