@@ -41,7 +41,7 @@ class MasterBot(Client):
             await self.tree.sync()
 
     async def on_message(self, message: Message) -> None:
-        await self.sekai.update_room_code(message)
+        await self.sekai.update_room_code(message, self.user.id)
 
 
 class SekaiManager:
@@ -49,9 +49,6 @@ class SekaiManager:
     CHANNEL_NAME_SEPARATOR = "-"
     CLOSED_ROOM_CODE = "xxxxx"
     ROOM_CODE_LEN = 5
-
-    def __init__(self) -> None:
-        self.bot = MasterBot()
 
     def is_manager(self, author: Member) -> bool:
         return any(role.name in self.MANAGER_ROLES for role in author.roles)
@@ -61,7 +58,7 @@ class SekaiManager:
             return text.isdecimal() or text == self.CLOSED_ROOM_CODE
         return False
 
-    async def update_room_code(self, message: Message) -> None:
+    async def update_room_code(self, message: Message, bot_id) -> None:
         """Highlight the sekai room code."""
         channel = message.channel
         if not isinstance(channel, TextChannel):
@@ -88,7 +85,7 @@ class SekaiManager:
             async with channel.typing():
                 await wait_for(channel.edit(name=name), timeout=2.0)
         except (TimeoutError, HTTPException):
-            content = f"{self.bot.user.id} {name} {message_text}"
+            content = f"{bot_id} {name} {message_text}"
         except Forbidden:
             description = "**У меня нет прав** на управление каналами"
             color = Color.red()
