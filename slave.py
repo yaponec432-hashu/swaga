@@ -34,27 +34,22 @@ class SlaveBot(Client):
 
 
 class SekaiManager:
+    ROOM_CODE_LEN = 5
+
     def __init__(self) -> None:
         error = FileNotFoundError
-        master_data = []
+        master_data = ""
         for _ in range(30):
             try:
-                with open("master_data", "r") as file:
-                    master_data += file.read().split()
+                with open("master_id", "r") as file:
+                    master_id += file.read()
             except error:
                 sleep(1)
-            if master_data:
+            if master_id:
                 break
-        if not master_data:
+        if not master_id:
             raise error
-        for i, item in enumerate(master_data):
-            if item.isdecimal():
-                master_data[i] = int(item)
-        (
-            self.master_id,
-            self.master_letter,
-            self.room_code_len
-        ) = master_data
+        self.master_id = int(master_id)
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
@@ -63,16 +58,18 @@ class SekaiManager:
             return
         if author.id != self.master_id:
             return
-        message_text = message.content
+        message_text = message.content.split()
         if not message_text:
             return
-        if message_text[0] != self.master_letter:
+        if len(message_text) == 1:
+            return
+        if int(message_text[0]) != self.master_id:
             return
         channel = message.channel
-        name = message_text[1:]
+        name = message_text[1]
         if name == channel.name:
             return
-        new_room_code = name[-self.room_code_len:]
+        new_room_code = name[-self.ROOM_CODE_LEN:]
         content = embed = None
         try:
             description = f"# `{new_room_code}`\nНовый код румы"
@@ -82,7 +79,7 @@ class SekaiManager:
         except (TimeoutError, HTTPException):
             content = (
                 "# :warning: Используй эту команду:"
-                f"\n```%rm {new_room_code}```"
+                f"```%rm {new_room_code}```"
             )
         except Forbidden:
             description = "**У меня нет прав** на управление каналами"
