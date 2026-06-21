@@ -52,7 +52,7 @@ class SekaiManager:
         if author.id != self.master_id:
             return
         message_text = message.content.split()
-        if len(message_text) <= 1:
+        if len(message_text) < 2:
             return
         if int(message_text[0]) != self.master_id:
             return
