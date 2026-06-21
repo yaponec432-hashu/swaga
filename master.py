@@ -51,7 +51,8 @@ class SekaiManager:
     ROOM_CODE_LEN = 5
 
     def is_manager(self, author: Member) -> bool:
-        return any(role.name in self.MANAGER_ROLES for role in author.roles)
+        roles = reversed(author.roles)
+        return any(role.name in self.MANAGER_ROLES for role in roles)
 
     def is_room_code(self, text: str) -> bool:
         if len(text) == self.ROOM_CODE_LEN:
