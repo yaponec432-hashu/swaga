@@ -37,4 +37,5 @@ jobs:
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
           SLAVE_TOKEN: ${{ secrets.SLAVE_TOKEN }}
+          MASTER_ID: ${{ vars.MASTER_ID }}
           BOT_SYNC_ENABLED: 0
