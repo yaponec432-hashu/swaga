@@ -43,7 +43,10 @@ class SekaiManager:
         message_text = message.content.split()
         if len(message_text) < 2:
             return
-        if int(message_text[0]) != self.MASTER_ID:
+        message_prefix = message_text[0]
+        if not message_prefix.isdecimal():
+            return
+        if int(message_prefix) != self.MASTER_ID:
             return
         channel = message.channel
         name = message_text[1]
