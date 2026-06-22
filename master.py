@@ -35,8 +35,6 @@ class MasterBot(Client):
         self.sekai = SekaiManager()
 
     async def setup_hook(self) -> None:
-        with open("master_id", "w") as file:
-            file.write(str(self.user.id) + "\n")
         if self.SYNC_ENABLED:
             await self.tree.sync()
 
