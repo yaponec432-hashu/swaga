@@ -4,7 +4,6 @@
 
 from logging import basicConfig, ERROR
 from asyncio import wait_for, Runner
-from time import sleep
 from os import environ
 
 from uvloop import new_event_loop
@@ -34,27 +33,17 @@ class SlaveBot(Client):
 
 
 class SekaiManager:
-    def __init__(self) -> None:
-        for _ in range(60):
-            try:
-                with open("master_id", "r") as file:
-                    self.master_id = int(file.read())
-            except (FileNotFoundError, ValueError):
-                sleep(1)
-            else:
-                break
-        else:
-            raise FileNotFoundError("Полундра нахуй")
+    MASTER_ID = int(environ["MASTER_ID"])
 
     async def update_room_code(self, message: Message) -> None:
         """Backup sekai room code highlighting."""
         author = message.author
-        if author.id != self.master_id:
+        if author.id != self.MASTER_ID:
             return
         message_text = message.content.split()
         if len(message_text) < 2:
             return
-        if int(message_text[0]) != self.master_id:
+        if int(message_text[0]) != self.MASTER_ID:
             return
         channel = message.channel
         name = message_text[1]
