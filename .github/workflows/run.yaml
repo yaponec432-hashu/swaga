@@ -23,7 +23,7 @@ jobs:
           python-version: '3.14'
 
       - name: Install uv
-        run: python3 -m pipx install uv
+        run: pipx install uv
         #run: bash -c "$(curl -Lf https://astral.sh/uv/install.sh)"
 
       - name: Run the bots
