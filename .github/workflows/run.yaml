@@ -23,13 +23,14 @@ jobs:
           python-version: '3.14'
 
       - name: Install uv
-        run: python3 -m pip install uv
+        run: python3 -m pipx install uv
         #run: bash -c "$(curl -Lf https://astral.sh/uv/install.sh)"
 
       - name: Run the bots
         run: |
           uv run ./master.py &
-          uv run ./slave.py
+          uv run ./slave.py &
+          wait
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
           SLAVE_TOKEN: ${{ secrets.SLAVE_TOKEN }}
