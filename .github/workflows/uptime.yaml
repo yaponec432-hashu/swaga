@@ -1,7 +1,7 @@
 name: Save uptime
 on:
   schedule:
-    - cron: '39-44 11 14 * *'
+    - cron: '39 15 14 * *'
 
 permissions:
   contents: write
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Get uptime
         run: |
