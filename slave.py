@@ -21,11 +21,11 @@ from discord import (
 
 class SlaveBot(Client):
     user: ClientUser
-    INTENTS = Intents.default()
-    INTENTS.message_content = True
 
     def __init__(self) -> None:
-        super().__init__(chunk_guilds_at_startup=False, intents=self.INTENTS)
+        intents = Intents.default()
+        intents.message_content = True
+        super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.sekai = SekaiManager()
 
     async def on_message(self, message: Message) -> None:
