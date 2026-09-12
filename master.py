@@ -26,10 +26,10 @@ from discord import (
 class MasterBot(Client):
     user: ClientUser
     SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
-    INTENTS = Intents.default()
-    INTENTS.message_content = True
 
     def __init__(self) -> None:
+        intents = Intents.default()
+        intents.message_content = True
         super().__init__(chunk_guilds_at_startup=False, intents=self.INTENTS)
         self.tree = app_commands.CommandTree(self)
         self.sekai = SekaiManager()
