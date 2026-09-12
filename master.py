@@ -30,7 +30,7 @@ class MasterBot(Client):
     def __init__(self) -> None:
         intents = Intents.default()
         intents.message_content = True
-        super().__init__(chunk_guilds_at_startup=False, intents=self.INTENTS)
+        super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.tree = app_commands.CommandTree(self)
         self.sekai = SekaiManager()
 
