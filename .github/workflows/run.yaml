@@ -23,7 +23,7 @@ jobs:
           python-version: '3.14'
 
       - name: Install uv
-        run: bash -c "$(curl -Lf https://astral.sh/uv/install.sh)"
+        run: bash -c "$(curl -f https://releases.astral.sh/installers/uv/latest/uv-installer.sh)"
 
       - name: Run the bots
         run: |
