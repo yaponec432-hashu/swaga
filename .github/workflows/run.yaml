@@ -2,7 +2,7 @@ name: Run the bots
 on:
   workflow_dispatch:
   schedule:
-    - cron: '38 * * * *'
+    - cron: '39 * * * *'
 
 concurrency:
   group: ${{ github.workflow }}
