@@ -1,7 +1,7 @@
 name: Save uptime
-on:
-  schedule:
-    - cron: '39 15 14 * *'
+#on:
+#  schedule:
+#    - cron: '39 15 14 * *'
 
 permissions:
   contents: write
