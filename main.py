@@ -6,6 +6,7 @@ from asyncio import wait_for, Runner
 from os import environ
 
 from uvloop import new_event_loop
+from yt_dlp import YoutubeDL
 from discord import (
     app_commands,
     Intents,
