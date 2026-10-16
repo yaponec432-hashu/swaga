@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
-from logging import basicConfig, ERROR
 from asyncio import wait_for, Runner
 from os import environ
 
@@ -14,121 +13,28 @@ from discord import (
     Embed,
     Color,
     Interaction,
-    TextChannel,
     ClientUser,
     Message,
-    Member,
-    HTTPException,
-    Forbidden
+    Member
 )
 
 
-class MasterBot(Client):
+class Bot(Client):
     user: ClientUser
     SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
 
     def __init__(self) -> None:
         intents = Intents.default()
-        intents.message_content = True
         super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.tree = app_commands.CommandTree(self)
-        self.sekai = SekaiManager()
 
     async def setup_hook(self) -> None:
         if self.SYNC_ENABLED:
             await self.tree.sync()
 
-    async def on_message(self, message: Message) -> None:
-        await self.sekai.update_room_code(message, self.user.id)
 
 
-class SekaiManager:
-    MANAGER_ROLES = {"Раннер ростера", "Лид-менеджер", "Менеджер", "Интерн"}
-    CHANNEL_NAME_SEPARATOR = "-"
-    CLOSED_ROOM_CODE = "xxxxx"
-    ROOM_CODE_LEN = 5
-
-    def is_manager(self, author: Member) -> bool:
-        return any(role.name in self.MANAGER_ROLES for role in author.roles)
-
-    def is_room_code(self, text: str) -> bool:
-        if len(text) == self.ROOM_CODE_LEN:
-            return text.isdecimal() or text == self.CLOSED_ROOM_CODE
-        return False
-
-    async def update_room_code(self, message: Message, bot_id: int) -> None:
-        """Highlight the sekai room code."""
-        author = message.author
-        if author.bot:
-            return
-        channel = message.channel
-        if not isinstance(channel, TextChannel):
-            return
-        message_text = message.content
-        if not self.is_room_code(message_text):
-            return
-        channel_name = channel.name.split(self.CHANNEL_NAME_SEPARATOR)
-        if len(channel_name) < 2:
-            return
-        current_room_code = channel_name[1]
-        if not self.is_room_code(current_room_code):
-            return
-        if current_room_code == message_text:
-            return
-        if not self.is_manager(author):
-            return
-        channel_name[1] = message_text
-        name = self.CHANNEL_NAME_SEPARATOR.join(channel_name)
-        content = embed = None
-        try:
-            description = f"# `{message_text}`\nНовый код румы"
-            color = Color.green()
-            async with channel.typing():
-                await wait_for(channel.edit(name=name), timeout=2.0)
-        except (TimeoutError, HTTPException):
-            content = f"{bot_id} {name} {message_text}"
-        except Forbidden:
-            description = "**У меня нет прав** на управление каналами"
-            color = Color.red()
-        if not content:
-            embed = Embed(description=description, color=color)
-        await message.reply(content=content, embed=embed, mention_author=False)
-
-
-class LayoutTranslator:
-    QWERTY = (
-        "qwertyuiop[]asdfghjkl;'zxcvbnm,./"
-        'QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?'
-    )
-    RUSSIAN = (
-        "йцукенгшщзхъфывапролджэячсмитьбю."
-        "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"
-    )
-    TRANSLATION_TABLE = "".maketrans(QWERTY, RUSSIAN)
-
-    def translate(self, text: str) -> str:
-        return text.translate(self.TRANSLATION_TABLE)
-
-
-bot = MasterBot()
-translator = LayoutTranslator()
-
-
-@bot.tree.context_menu(name="Перевести с кристалийского")
-async def translate_from_crystalian(
-    ctx: Interaction,
-    message: Message
-) -> None:
-    description = message.jump_url + "\n"
-    message_text = message.content
-    if message_text:
-        description += translator.translate(message_text)
-        color = Color.green()
-    else:
-        description += "Пусто"
-        color = Color.red()
-    embed = Embed(description=description, color=color)
-    await ctx.response.send_message(embed=embed)
+bot = Bot()
 
 
 @bot.tree.command(description="Данные сервака")
@@ -184,6 +90,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    basicConfig(level=ERROR)
     with Runner(loop_factory=new_event_loop) as runner:
         runner.run(main())
