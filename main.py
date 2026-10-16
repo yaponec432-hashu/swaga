@@ -13,6 +13,7 @@ from discord import (
     Client,
     Embed,
     Color,
+    File,
     Interaction,
     ClientUser,
     Message,
@@ -44,12 +45,13 @@ async def download_audio(ctx: Interaction, link: str) -> None:
         "format": "140",
         "cookiefile": "cookies",
         "sleep_interval": 1,
-        "max_sleep_interval": 5,
+        "max_sleep_interval": 1,
         "overwrites": True,
         "outtmpl": "audio.m4a",
     }
     with YoutubeDL(opts) as ydl:
         ydl.download(link)
+    await ctx.response.send_message(file=File("audio.m4a"))
 
 
 @bot.tree.command(description="Данные сервака")
