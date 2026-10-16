@@ -33,7 +33,6 @@ class Bot(Client):
             await self.tree.sync()
 
 
-
 bot = Bot()
 
 
