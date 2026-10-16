@@ -21,5 +21,6 @@ jobs:
         with:
           python-version: '3.14'
 
-      - name: Install uv
-        run: bash -c "$(curl -f https://releases.astral.sh/installers/uv/latest/uv-installer.sh)"
+      - uses: astral-sh/setup-uv@v10.3.0
+        with:
+          version: "latest"
