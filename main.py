@@ -42,6 +42,7 @@ bot = Bot()
 
 @bot.tree.command(description="ы")
 async def download_audio(ctx: Interaction, link: str) -> None:
+    await ctx.response.defer()
     opts = {
         "format": "140",
         "cookiefile": "cookies",
@@ -52,7 +53,7 @@ async def download_audio(ctx: Interaction, link: str) -> None:
     }
     with YoutubeDL(opts) as ydl:
         ydl.download(link)
-    await ctx.response.send_message(file=File("audio.m4a"))
+    await ctx.followup.send(file=File("audio.m4a"))
 
 
 @bot.tree.command(description="Данные сервака")
