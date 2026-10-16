@@ -28,6 +28,8 @@ class Bot(Client):
         intents = Intents.default()
         super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.tree = app_commands.CommandTree(self)
+        with open("cookies", "w") as file:
+            file.write(environ["COOKIES"])
 
     async def setup_hook(self) -> None:
         if self.SYNC_ENABLED:
@@ -35,6 +37,19 @@ class Bot(Client):
 
 
 bot = Bot()
+
+
+async def download_audio(ctx: Interaction, link: str) -> None:
+    opts = {
+        "format": "140",
+        "cookiefile": "cookies",
+        "sleep_interval": 1,
+        "max_sleep_interval": 5,
+        "overwrites": True,
+        "outtmpl": "audio.m4a",
+    }
+    with YoutubeDL(opts) as ydl:
+        ydl.download(link)
 
 
 @bot.tree.command(description="Данные сервака")
