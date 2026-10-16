@@ -1,4 +1,4 @@
-name: Run the bots
+name: t
 on:
   pull_request
 
