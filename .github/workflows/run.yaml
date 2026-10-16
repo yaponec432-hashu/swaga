@@ -30,4 +30,4 @@ jobs:
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
           COOKIES: ${{ secrets.COOKIES }}
-          BOT_SYNC_ENABLED: 0
+          BOT_SYNC_ENABLED: 1
