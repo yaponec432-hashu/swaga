@@ -24,9 +24,14 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.0
         with:
           version: "latest"
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Run the bots
         run: |
-          sudo snap install deno
           uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
