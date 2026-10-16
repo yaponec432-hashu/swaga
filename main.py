@@ -40,6 +40,7 @@ class Bot(Client):
 bot = Bot()
 
 
+@bot.tree.command(description="ы")
 async def download_audio(ctx: Interaction, link: str) -> None:
     opts = {
         "format": "140",
