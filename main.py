@@ -57,7 +57,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "-stats",
         "-i", "pipe:0",
         "-f", "null",
-        "-",
+        "/dev/null",
         stdin=subprocess.PIPE,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE
@@ -98,7 +98,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
 
     buffer = BytesIO(stdout)
     await ctx.response.send_message(
-        file=File(buffer, filename="tg_" + file.filename)
+        file=File(buffer, filename=file.filename + ".webm")
     )
 
 
