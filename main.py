@@ -63,7 +63,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
         "-an",
         "-c:v", "libvpx-vp9",
         "-crf", "42",
-        "-b:v", "704",
+        "-b:v", "704k",
         "-deadline", "best",
         "-row-mt", "1",
         "-vf", f"setpts=PTS/{speed},scale=512:512",
