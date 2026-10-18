@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
+from tempfile import NamedTemporaryFile
 from logging import basicConfig, ERROR
 from io import BytesIO
 from asyncio import (
@@ -10,7 +11,7 @@ from asyncio import (
     wait_for,
     Runner
 )
-from os import environ
+from os import environ, unlink
 
 from uvloop import new_event_loop
 from discord import (
@@ -51,22 +52,20 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     #await ctx.response.defer()
     data = await file.read()
 
+    with NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(data)
+        path = temp_file.name
+
     proc = await create_subprocess_exec(
-        "ffmpeg",
+        "ffprobe", 
         "-v", "24",
-        "-stats",
-        "-i", "pipe:0",
-        "-f", "null",
-        "/dev/null",
-        stdin=subprocess.PIPE,
+        "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1",
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE
     )
-    _, stderr = await proc.communicate(data)
-    output = stderr.decode()
-    duration = float(
-        output.split("time=")[1].split()[0].split(":")[2]
-    )
+    _, stderr = await proc.communicate()
+    duration = float(stderr.decode().split(":")[2])
     speed = duration/2.9 if duration > 3.0 else 1.0
 
     decoder_flag = decoder = ""
@@ -78,7 +77,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "ffmpeg",
         "-v", "24",
         decoder_flag, decoder,
-        "-i", "pipe:0",
+        "-i", path,
         "-an",
         "-c:v", "libvpx-vp9",
         "-crf", "42",
@@ -91,10 +90,10 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "-g", "90",
         "-f", "webm",
         "--", "pipe:1",
-        stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
     )
-    stdout, _ = await proc.communicate(data)
+    stdout, _ = await proc.communicate()
+    unlink(path)
 
     buffer = BytesIO(stdout)
     await ctx.response.send_message(
