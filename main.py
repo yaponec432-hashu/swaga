@@ -61,11 +61,10 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "-v", "24",
         "-show_entries", "format=duration",
         "-of", "default=noprint_wrappers=1:nokey=1",
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.PIPE
+        stdout=subprocess.PIPE
     )
-    _, stderr = await proc.communicate()
-    duration = float(stderr.decode().split(":")[2])
+    stdout, _ = await proc.communicate()
+    duration = float(stdout.decode().split(":")[2])
     speed = duration/2.9 if duration > 3.0 else 1.0
 
     decoder_flag = decoder = ""
