@@ -55,7 +55,7 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
         "-v", "24",
         "-show_entries", "format=duration",
         "-of", "default=noprint_wrappers=1:nokey=1",
-        "--", "pipe:0"
+        "--", "pipe:0",
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE
     )
