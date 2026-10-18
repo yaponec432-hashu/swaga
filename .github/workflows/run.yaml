@@ -32,5 +32,4 @@ jobs:
           uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
-          COOKIES: ${{ secrets.COOKIES }}
           BOT_SYNC_ENABLED: 1
