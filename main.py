@@ -45,10 +45,11 @@ class Bot(Client):
 bot = Bot()
 
 
-@bot.tree.command(description="Скачать звук с ютуба")
-async def download_audio(ctx: Interaction, file: Attachment) -> None:
+@bot.tree.command(description="Сделать файл тг стикера")
+@app_commands.describe(file="Видео/анимация")
+async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     #await ctx.response.defer()
-    data = await link.read()
+    data = await file.read()
 
     proc = await create_subprocess_exec(
         "ffprobe",
