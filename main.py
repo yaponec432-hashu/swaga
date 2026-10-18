@@ -57,10 +57,9 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
         "-of", "default=noprint_wrappers=1:nokey=1",
         "--", "pipe:0"
         stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stdout=subprocess.PIPE
     )
-    stdout, stderr = await proc.communicate(data)
+    stdout, _ = await proc.communicate(data)
     duration = float(stdout.decode())
     speed = duration/2.9 if duration > 3.0 else 1.0
 
@@ -88,9 +87,8 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
         "--", "pipe:1",
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
     )
-    stdout, stderr = await proc.communicate(data)
+    stdout, _ = await proc.communicate(data)
 
     buffer = BytesIO(stdout)
     await ctx.response.send_message(
