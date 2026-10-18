@@ -50,6 +50,18 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
     #await ctx.response.defer()
     data = await link.read()
 
+    proc = await create_subprocess_exec(
+        "ffprobe",
+        "-v", "24",
+        "-show_entries", "format=duration",
+        "-of", "default=noprint_wrappers=1:nokey=1",
+        "--", "pipe:0"
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    stdout, stderr = await proc.communicate(data)
+
     decoder_flag = decoder = ""
     if file.filename.lower().endswith(".webm")
         decoder_flag = "-c:v"
@@ -71,7 +83,7 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
         "-fpsmax", "30",
         "-g", "90",
         "-f", "webm",
-        "pipe:1",
+        "--", "pipe:1",
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
