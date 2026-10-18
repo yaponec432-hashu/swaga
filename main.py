@@ -2,11 +2,15 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
-from asyncio import wait_for, Runner
+from asyncio import (
+    create_subprocess_exec,
+    subprocess,
+    wait_for,
+    Runner
+)
 from os import environ
 
 from uvloop import new_event_loop
-from yt_dlp import YoutubeDL
 from discord import (
     app_commands,
     Intents,
@@ -42,34 +46,8 @@ bot = Bot()
 
 @bot.tree.command(description="Скачать звук с ютуба")
 async def download_audio(ctx: Interaction, link: str) -> None:
-    await ctx.response.defer()
-    opts = {
-        "format": "140",
-        "cookiefile": "cookies",
-        "sleep_interval": 1,
-        "max_sleep_interval": 5,
-        "overwrites": True,
-        "outtmpl": "audio.m4a",
-    }
-    with YoutubeDL(opts) as ydl:
-        ydl.download(link)
+    
     await ctx.followup.send(file=File("audio.m4a"))
-
-
-@bot.tree.command(description="Данные сервака")
-@app_commands.choices(
-    item=[
-        app_commands.Choice(name="Иконка", value="icon"),
-        app_commands.Choice(name="Баннер", value="banner"),
-        app_commands.Choice(name="Сплэш инвайта", value="splash"),
-        app_commands.Choice(name="ID", value="id")
-    ]
-)
-@app_commands.describe(item="Докс сват спортики")
-async def server_data(ctx: Interaction, item: str) -> None:
-    data = getattr(ctx.guild, item)
-    content = f"```{data}```" if item == "id" else "> " + str(data)
-    await ctx.response.send_message(content=content)
 
 
 @bot.tree.command(description="Данные профиля чела")
