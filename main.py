@@ -62,8 +62,9 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
         "pipe:1",
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
     )
-    stdout = await proc.communicate(data)
+    stdout, stderr = await proc.communicate(data)
 
     buf = BytesIO(stdout)
 
