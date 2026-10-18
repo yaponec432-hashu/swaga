@@ -57,7 +57,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "-stats",
         "-i", "pipe:0",
         "-f", "null",
-        "--", "-",
+        "-",
         stdin=subprocess.PIPE,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE
