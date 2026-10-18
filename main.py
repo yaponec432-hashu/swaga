@@ -50,7 +50,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
     await ctx.response.defer()
     data = await link.read()
 
-    proc = await asyncio.create_subprocess_exec(
+    proc = await create_subprocess_exec(
         "ffmpeg",
         "-v", "24",
         "-i", "pipe:0",
@@ -68,7 +68,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
     buf = BytesIO(stdout)
 
     await ctx.followup.send(
-        file=discord.File(buf, filename=f"slowed_{attachment.filename}")
+        file=File(buf, filename=f"slowed_{attachment.filename}")
     )
 
 
