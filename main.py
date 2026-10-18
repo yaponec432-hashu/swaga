@@ -52,16 +52,21 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     data = await file.read()
 
     proc = await create_subprocess_exec(
-        "ffprobe",
+        "ffmpeg",
         "-v", "24",
-        "-show_entries", "format=duration",
-        "-of", "default=noprint_wrappers=1:nokey=1",
-        "--", "pipe:0",
+        "-stats",
+        "-i", "pipe:0",
+        "-f", "null",
+        "--", "pipe:1",
         stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE
     )
-    stdout, _ = await proc.communicate(data)
-    duration = float(stdout.decode())
+    _, stderr = await proc.communicate(data)
+    output = stderr.decode()
+    duration = float(
+        output.split("time=")[1].split()[0].split(":")[2]
+    )
     speed = duration/2.9 if duration > 3.0 else 1.0
 
     decoder_flag = decoder = ""
