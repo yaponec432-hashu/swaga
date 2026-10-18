@@ -68,7 +68,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
     buf = BytesIO(stdout)
 
     await ctx.followup.send(
-        file=File(buf, filename=f"slowed_{attachment.filename}")
+        file=File(buf, filename=f"slowed_{link.filename}")
     )
 
 
