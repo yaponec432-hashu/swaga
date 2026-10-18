@@ -35,8 +35,6 @@ class Bot(Client):
         intents = Intents.default()
         super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.tree = app_commands.CommandTree(self)
-        with open("cookies", "w") as file:
-            file.write(environ["COOKIES"])
 
     async def setup_hook(self) -> None:
         if self.SYNC_ENABLED:
