@@ -47,17 +47,22 @@ bot = Bot()
 
 @bot.tree.command(description="Скачать звук с ютуба")
 async def download_audio(ctx: Interaction, link: Attachment) -> None:
-    await ctx.response.defer()
+    #await ctx.response.defer()
     data = await link.read()
 
     proc = await create_subprocess_exec(
         "ffmpeg",
         "-v", "24",
         "-i", "pipe:0",
-        "-vf", "setpts=PTS*1.5",
+        "-an",
         "-c:v", "libvpx-vp9",
-        "-deadline", "realtime",
-        "-cpu-used", "5",
+        "-crf", "42",
+        "-b:v", "704",
+        "-deadline", "best",
+        "-row-mt", "1",
+        "-g 90",
+        "-fpsmax", "30",
+        "-aspect", "1:1",
         "-f", "webm",
         "pipe:1",
         stdin=subprocess.PIPE,
@@ -68,7 +73,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
 
     buf = BytesIO(stdout)
 
-    await ctx.followup.send(
+    await ctx.response.send_message(
         file=File(buf, filename=f"slowed_{link.filename}")
     )
 
