@@ -71,7 +71,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     decoder_flag = decoder = ""
     if file.filename.lower().endswith(".webm"):
         decoder_flag = "-c:v"
-        decoder = "libvpx-vp9"
+        decoder = "libvpx-vp9" #"-c:v", "libvpx-vp9",
 
     proc = await create_subprocess_exec(
         "ffmpeg",
@@ -79,7 +79,6 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         decoder_flag, decoder,
         "-i", path,
         "-an",
-        "-c:v", "libvpx-vp9",
         "-crf", "42",
         "-b:v", "704k",
         "-deadline", "best",
