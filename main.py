@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
+from io import BytesIO
 from asyncio import (
     create_subprocess_exec,
     subprocess,
@@ -47,8 +48,28 @@ bot = Bot()
 
 @bot.tree.command(description="Скачать звук с ютуба")
 async def download_audio(ctx: Interaction, link: Attachment) -> None:
-    
-    await ctx.response.send_message(str(link))
+    data = await link.read()
+
+    proc = await asyncio.create_subprocess_exec(
+        "ffmpeg",
+        "-v", "24",
+        "-i", "pipe:0",
+        "-vf", "setpts=PTS*1.5",
+        "-c:v", "libvpx-vp9",
+        "-deadline", "realtime",
+        "-cpu-used", "5",
+        "-f", "webm",
+        "pipe:1",
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+    )
+    stdout = await proc.communicate(data)
+
+    buf = BytesIO(stdout)
+
+    await ctx.response.send_message(
+        file=discord.File(buf, filename=f"slowed_{attachment.filename}")
+    )
 
 
 @bot.tree.command(description="Данные профиля чела")
