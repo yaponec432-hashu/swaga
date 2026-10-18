@@ -12,6 +12,7 @@ from os import environ
 
 from uvloop import new_event_loop
 from discord import (
+    Attachment,
     app_commands,
     Intents,
     Client,
@@ -45,7 +46,7 @@ bot = Bot()
 
 
 @bot.tree.command(description="Скачать звук с ютуба")
-async def download_audio(ctx: Interaction, link: str) -> None:
+async def download_audio(ctx: Interaction, link: Attachment) -> None:
     
     await ctx.followup.send(file=File("audio.m4a"))
 
