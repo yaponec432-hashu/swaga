@@ -46,7 +46,7 @@ bot = Bot()
 
 
 @bot.tree.command(description="Скачать звук с ютуба")
-async def download_audio(ctx: Interaction, link: Attachment) -> None:
+async def download_audio(ctx: Interaction, file: Attachment) -> None:
     #await ctx.response.defer()
     data = await link.read()
 
@@ -81,7 +81,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
     buf = BytesIO(stdout)
 
     await ctx.response.send_message(
-        file=File(buf, filename=f"slowed_{link.filename}")
+        file=File(buf, filename=f"slowed_{file.filename}")
     )
 
 
