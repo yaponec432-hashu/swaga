@@ -46,6 +46,7 @@ bot = Bot()
 
 @bot.tree.command(description="Скачать звук с ютуба")
 async def download_audio(ctx: Interaction, link: Attachment) -> None:
+    await ctx.response.defer()
     data = await link.read()
 
     proc = await asyncio.create_subprocess_exec(
@@ -65,7 +66,7 @@ async def download_audio(ctx: Interaction, link: Attachment) -> None:
 
     buf = BytesIO(stdout)
 
-    await ctx.response.send_message(
+    await ctx.followup.send(
         file=discord.File(buf, filename=f"slowed_{attachment.filename}")
     )
 
