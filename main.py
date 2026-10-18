@@ -62,7 +62,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "-show_entries", "format=duration",
         "-of", "default=noprint_wrappers=1:nokey=1",
         "-i", path,
-        "--", "pipe:1"
+        "--", "pipe:1",
         stdout=subprocess.PIPE
     )
     stdout, _ = await proc.communicate()
