@@ -92,10 +92,9 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
     )
     stdout, stderr = await proc.communicate(data)
 
-    buf = BytesIO(stdout)
-
+    buffer = BytesIO(stdout)
     await ctx.response.send_message(
-        file=File(buf, filename=f"slowed_{file.filename}")
+        file=File(buffer, filename="tg_" + file.filename)
     )
 
 
