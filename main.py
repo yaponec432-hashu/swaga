@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
+from logging import basicConfig, ERROR
 from io import BytesIO
 from asyncio import (
     create_subprocess_exec,
@@ -108,5 +109,6 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    basicConfig(level=ERROR)
     with Runner(loop_factory=new_event_loop) as runner:
         runner.run(main())
