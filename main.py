@@ -61,6 +61,8 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
         stderr=subprocess.PIPE
     )
     stdout, stderr = await proc.communicate(data)
+    duration = float(stdout.decode())
+    speed = duration/2.9 if duration > 3.0 else 1.0
 
     decoder_flag = decoder = ""
     if file.filename.lower().endswith(".webm")
