@@ -64,7 +64,7 @@ async def download_audio(ctx: Interaction, file: Attachment) -> None:
     speed = duration/2.9 if duration > 3.0 else 1.0
 
     decoder_flag = decoder = ""
-    if file.filename.lower().endswith(".webm")
+    if file.filename.lower().endswith(".webm"):
         decoder_flag = "-c:v"
         decoder = "libvpx-vp9"
 
