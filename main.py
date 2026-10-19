@@ -41,7 +41,7 @@ bot = Bot()
 @bot.tree.command(description="Сделать файл тг стикера")
 @app_commands.describe(file="Видео/анимация")
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
-    await ctx.response.defer()
+    #await ctx.response.defer()
 
     with NamedTemporaryFile(suffix=".webm", delete=False) as temp_file:
         output_path = temp_file.name
@@ -81,7 +81,6 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-minrate", "384k",
             "-b:v", "384k",
             "-maxrate", "384k",
-            "-deadline", "best",
             "-row-mt", "1",
             "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
             "-pix_fmt", "yuva420p",
@@ -106,7 +105,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     finally:
         remove(output_path)
         remove(input_path)
-    await ctx.followup.send(text, file=sticker_file)
+    await ctx.response.send_message(text, file=sticker_file)
 
 
 @bot.tree.command(description="Id чела")
