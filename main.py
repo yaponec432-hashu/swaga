@@ -19,8 +19,6 @@ from discord import (
     app_commands,
     Intents,
     Client,
-    Embed,
-    Color,
     File,
     Interaction,
     ClientUser,
