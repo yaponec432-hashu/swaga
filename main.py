@@ -6,7 +6,6 @@ from asyncio import create_subprocess_exec, subprocess, Runner
 from tempfile import NamedTemporaryFile
 from logging import basicConfig, ERROR
 from os import environ, remove
-from io import BytesIO
 
 from uvloop import new_event_loop
 from discord import (
@@ -47,7 +46,9 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     data = await file.read()
     with NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(data)
-        path = temp_file.name
+        input_path = temp_file.name
+    with NamedTemporaryFile(delete=False) as temp_file:
+        output_path = temp_file.name
 
     try:
         decoder_flag = decoder = ""
@@ -60,12 +61,12 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-v", "24",
             "-show_entries", "format=duration",
             "-of", "default=noprint_wrappers=1:nokey=1",
-            "-i", path,
+            "-i", input_path,
             stdout=subprocess.PIPE
         )
         stdout, _ = await proc.communicate()
         if proc.returncode != 0:
-            raise RuntimeError("ffmpeg")
+            raise RuntimeError("ffprobe")
 
         duration = float(stdout.decode())
         speed = duration/2.9 if duration > 3.0 else 1.0
@@ -74,7 +75,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "ffmpeg",
             "-v", "24",
             decoder_flag, decoder,
-            "-i", path,
+            "-i", input_path,
             "-an",
             "-c:v", "libvpx-vp9",
             "-minrate", "416k",
@@ -89,24 +90,24 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-aspect", "1:1",
             "-g", "90",
             "-f", "webm",
-            "--", "pipe:1"
+            "--", output_path
         )
 
         cmd = tuple(i for i in cmd if i)
-        proc = await create_subprocess_exec(*cmd, stdout=subprocess.PIPE)
-        stdout, _ = await proc.communicate()
+        proc = await create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL)
+        await proc.communicate()
         if proc.returncode != 0:
             raise RuntimeError("ffmpeg")
 
-        buffer = BytesIO(stdout)
         text = "Лови аптечку"
-        output_file=File(buffer, filename=file.filename + ".webm")
+        sticker_file=File(output_file, filename="tg_{file.filename}.webm")
     except RuntimeError:
         text = "Обшибка, попробуй другой формат файла"
-        output_file = None
+        sticker_file = None
     finally:
-        remove(path)
-    await ctx.followup.send(text, file=output_file)
+        remove(output_path)
+        remove(input_path)
+    await ctx.followup.send(text, file=sticker_file)
 
 
 @bot.tree.command(description="Id чела")
