@@ -127,18 +127,16 @@ async def member_data(ctx: Interaction, member: Member, item: str) -> None:
 
 
 @bot.tree.command(description="Посчитать длину строки")
-@app_commands.describe(text="Пиши свою строку")
+@app_commands.describe(text="3 хаммама прогревай быстрей")
 async def length(ctx: Interaction, text: str) -> None:
-    description = f"Длина {len(text)}"
-    embed = Embed(description=description, color=Color.green())
-    await ctx.response.send_message(embed=embed)
+    text = len(text)
+    await ctx.response.send_message(text)
 
 
 @bot.tree.command(description="Проверить синхронизацию")
 async def check_sync(ctx: Interaction) -> None:
-    description = "Ага" if bot.SYNC_ENABLED else "Нет нихуя"
-    embed = Embed(description=description, color=Color.green())
-    await ctx.response.send_message(embed=embed)
+    text = "Ага" if bot.SYNC_ENABLED else "Нет нихуя"
+    await ctx.response.send_message(text)
 
 
 async def main() -> None:
