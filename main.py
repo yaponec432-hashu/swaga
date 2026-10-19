@@ -64,6 +64,9 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             stdout=subprocess.PIPE
         )
         stdout, _ = await proc.communicate()
+        if proc.returncode != 0:
+            raise RuntimeError("ffmpeg")
+
         duration = float(stdout.decode())
         speed = duration/2.9 if duration > 3.0 else 1.0
 
@@ -92,10 +95,13 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         cmd = tuple(i for i in cmd if i)
         proc = await create_subprocess_exec(*cmd, stdout=subprocess.PIPE)
         stdout, _ = await proc.communicate()
+        if proc.returncode != 0:
+            raise RuntimeError("ffmpeg")
+
         buffer = BytesIO(stdout)
         text = "Лови аптечку"
         output_file=File(buffer, filename=file.filename + ".webm")
-    except Exception:
+    except RuntimeError:
         text = "Обшибка, попробуй другой формат файла"
         output_file = None
     finally:
