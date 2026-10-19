@@ -43,12 +43,12 @@ bot = Bot()
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.response.defer()
 
+    with NamedTemporaryFile(suffix=".webm", delete=False) as temp_file:
+        output_path = temp_file.name
     data = await file.read()
     with NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(data)
         input_path = temp_file.name
-    with NamedTemporaryFile(delete=False) as temp_file:
-        output_path = temp_file.name
 
     try:
         decoder_flag = decoder = ""
@@ -89,7 +89,6 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-frame-parallel", "0",
             "-aspect", "1:1",
             "-g", "90",
-            "-f", "webm",
             "--", output_path
         )
 
