@@ -101,12 +101,14 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         )
         stdout, _ = await proc.communicate()
         buffer = BytesIO(stdout)
+        text = "Лови аптечку"
+        output_file=File(buffer, filename=file.filename + ".webm")
+    except Exception:
+        text = "Обшибка, попробуй другой формат файла"
+        output_file = None
     finally:
         remove(path)
-
-    await ctx.followup.send(
-        file=File(buffer, filename=file.filename + ".webm")
-    )
+    await ctx.followup.send(text, file=output_file)
 
 
 @bot.tree.command(description="Данные профиля чела")
