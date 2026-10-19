@@ -11,7 +11,7 @@ from asyncio import (
     wait_for,
     Runner
 )
-from os import environ, unlink
+from os import environ, remove
 
 from uvloop import new_event_loop
 from discord import (
@@ -85,11 +85,11 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         "-maxrate", "416k",
         "-deadline", "best",
         "-row-mt", "1",
-        "-vf", f"setpts=PTS/{speed},scale=512:512",
+        "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
         "-pix_fmt", "yuva420p",
+        "-fps_max", "cfr",
         "-frame-parallel", "0",
         "-aspect", "1:1",
-        "-fpsmax", "30",
         "-g", "90",
         "-f", "webm",
         "--", "pipe:1"
@@ -101,7 +101,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         stdout=subprocess.PIPE,
     )
     stdout, _ = await proc.communicate()
-    unlink(path)
+    remove(path)
 
     buffer = BytesIO(stdout)
     await ctx.followup.send(
