@@ -134,9 +134,8 @@ async def check_sync(ctx: Interaction) -> None:
 
 
 async def main() -> None:
-    token = environ["MASTER_TOKEN"]
     async with bot:
-       await bot.start(token)
+       await bot.start(environ["MASTER_TOKEN"])
 
 
 if __name__ == "__main__":
