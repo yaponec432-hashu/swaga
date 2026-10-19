@@ -25,10 +25,10 @@ from discord import (
 class Bot(Client):
     user: ClientUser
     SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
-    INTENTS = Intents.default()
 
     def __init__(self) -> None:
-        super().__init__(chunk_guilds_at_startup=False, intents=self.INTENTS)
+        intents = Intents.default()
+        super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self) -> None:
