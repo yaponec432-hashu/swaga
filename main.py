@@ -111,19 +111,10 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.followup.send(text, file=output_file)
 
 
-@bot.tree.command(description="Данные профиля чела")
-@app_commands.choices(
-    item=[
-        app_commands.Choice(name="Ава", value="display_avatar"),
-        app_commands.Choice(name="Username", value="name"),
-        app_commands.Choice(name="ID", value="id")
-    ]
-)
-@app_commands.describe(member="Чел", item="Докс сват спортики")
-async def member_data(ctx: Interaction, member: Member, item: str) -> None:
-    data = getattr(member, item)
-    content = "> " + str(data) if item == "display_avatar" else f"```{data}```"
-    await ctx.response.send_message(content=content)
+@app_commands.describe(member="Чел")
+async def avatarka(ctx: Interaction, member: Member) -> None:
+    text = member.display_avatar
+    await ctx.response.send_message(text)
 
 
 @bot.tree.command(description="Посчитать длину строки")
