@@ -81,7 +81,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-row-mt", "1",
             "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
             "-pix_fmt", "yuva420p",
-            "-fps_max", "cfr",
+            "-fps_mode", "cfr",
             "-frame-parallel", "0",
             "-aspect", "1:1",
             "-g", "90",
