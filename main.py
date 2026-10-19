@@ -2,28 +2,23 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
+from asyncio import create_subprocess_exec, subprocess, Runner
 from tempfile import NamedTemporaryFile
 from logging import basicConfig, ERROR
-from io import BytesIO
-from asyncio import (
-    create_subprocess_exec,
-    subprocess,
-    wait_for,
-    Runner
-)
 from os import environ, remove
+from io import BytesIO
 
 from uvloop import new_event_loop
 from discord import (
-    Attachment,
     app_commands,
-    Intents,
-    Client,
-    File,
     Interaction,
+    Attachment,
     ClientUser,
     Message,
-    Member
+    Intents,
+    Client,
+    Member,
+    File
 )
 
 
