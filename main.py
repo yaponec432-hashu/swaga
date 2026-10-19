@@ -48,60 +48,62 @@ bot = Bot()
 @app_commands.describe(file="Видео/анимация")
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.response.defer()
-    data = await file.read()
 
+    data = await file.read()
     with NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(data)
         path = temp_file.name
 
-    decoder_flag = decoder = ""
-    if file.filename.lower().endswith(".webm"):
-        decoder_flag = "-c:v"
-        decoder = "libvpx-vp9"
+    try:
+        decoder_flag = decoder = ""
+        if file.filename.lower().endswith(".webm"):
+            decoder_flag = "-c:v"
+            decoder = "libvpx-vp9"
 
-    proc = await create_subprocess_exec(
-        "ffprobe", 
-        "-v", "24",
-        "-show_entries", "format=duration",
-        "-of", "default=noprint_wrappers=1:nokey=1",
-        "-i", path,
-        stdout=subprocess.PIPE
-    )
-    stdout, _ = await proc.communicate()
-    duration = float(stdout.decode())
-    speed = duration/2.9 if duration > 3.0 else 1.0
+        proc = await create_subprocess_exec(
+            "ffprobe", 
+            "-v", "24",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            "-i", path,
+            stdout=subprocess.PIPE
+        )
+        stdout, _ = await proc.communicate()
+        duration = float(stdout.decode())
+        speed = duration/2.9 if duration > 3.0 else 1.0
 
-    cmd = (
-        "ffmpeg",
-        "-v", "24",
-        decoder_flag, decoder,
-        "-i", path,
-        "-an",
-        "-c:v", "libvpx-vp9",
-        "-minrate", "416k",
-        "-b:v", "416k",
-        "-maxrate", "416k",
-        "-deadline", "best",
-        "-row-mt", "1",
-        "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
-        "-pix_fmt", "yuva420p",
-        "-fps_max", "cfr",
-        "-frame-parallel", "0",
-        "-aspect", "1:1",
-        "-g", "90",
-        "-f", "webm",
-        "--", "pipe:1"
-    )
+        cmd = (
+            "ffmpeg",
+            "-v", "24",
+            decoder_flag, decoder,
+            "-i", path,
+            "-an",
+            "-c:v", "libvpx-vp9",
+            "-minrate", "416k",
+            "-b:v", "416k",
+            "-maxrate", "416k",
+            "-deadline", "best",
+            "-row-mt", "1",
+            "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
+            "-pix_fmt", "yuva420p",
+            "-fps_max", "cfr",
+            "-frame-parallel", "0",
+            "-aspect", "1:1",
+            "-g", "90",
+            "-f", "webm",
+            "--", "pipe:1"
+        )
 
-    cmd = tuple(i for i in cmd if i)
-    proc = await create_subprocess_exec(
-        *cmd,
-        stdout=subprocess.PIPE,
-    )
-    stdout, _ = await proc.communicate()
-    remove(path)
+        cmd = tuple(i for i in cmd if i)
+        proc = await create_subprocess_exec(
+            *cmd,
+            stdout=subprocess.PIPE,
+        )
+        stdout, _ = await proc.communicate()
+        buffer = BytesIO(stdout)
+    finally:
+        remove(path)
 
-    buffer = BytesIO(stdout)
     await ctx.followup.send(
         file=File(buffer, filename=file.filename + ".webm")
     )
