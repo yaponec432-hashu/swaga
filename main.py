@@ -90,10 +90,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         )
 
         cmd = tuple(i for i in cmd if i)
-        proc = await create_subprocess_exec(
-            *cmd,
-            stdout=subprocess.PIPE,
-        )
+        proc = await create_subprocess_exec(*cmd, stdout=subprocess.PIPE)
         stdout, _ = await proc.communicate()
         buffer = BytesIO(stdout)
         text = "Лови аптечку"
