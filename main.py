@@ -72,7 +72,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         speed = duration/2.9 if duration > 3.0 else 1.0
 
         cmd = (
-            "ffmpeg",
+            "ffmpeg", "-y",
             "-v", "24",
             decoder_flag, decoder,
             "-i", input_path,
