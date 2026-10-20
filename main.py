@@ -129,8 +129,10 @@ async def avatarka(ctx: Interaction, member: Member) -> None:
 @bot.tree.command(description="Сделать QR код")
 @app_commands.describe(text="Текст QR кода")
 async def qr(ctx: Interaction, text: str) -> None:
-    text = quote_plus(text)
-    text = "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + text
+    text = (
+    "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl="
+        + quote_plus(text)
+    )
     await ctx.response.send_message(text)
 
 
