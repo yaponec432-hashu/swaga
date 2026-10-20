@@ -83,6 +83,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
 
     try:
         decoder_flag = decoder = ""
+        # Keep transparency
         if file.filename.lower().endswith(".webm"):
             decoder_flag = "-c:v"
             decoder = "libvpx-vp9"
@@ -116,8 +117,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-maxrate", bitrate,
             "-bufsize", bitrate,
             "-row-mt", "1",
-            "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
-            "-pix_fmt", "yuva420p",
+            "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
             "-fps_mode", "cfr",
             "-frame-parallel", "0",
             "-aspect", "1:1",
