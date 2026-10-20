@@ -56,7 +56,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             decoder_flag = "-c:v"
             decoder = "libvpx-vp9"
 
-        proc = await create_subprocess_exec(
+        process = await create_subprocess_exec(
             "ffprobe", 
             "-v", "24",
             "-show_entries", "format=duration",
@@ -64,8 +64,8 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-i", input_path,
             stdout=subprocess.PIPE
         )
-        stdout, _ = await proc.communicate()
-        if proc.returncode != 0:
+        stdout, _ = await process.communicate()
+        if process.returncode != 0:
             raise RuntimeError("ffprobe")
 
         duration = float(stdout.decode())
@@ -92,9 +92,9 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         )
 
         cmd = tuple(i for i in cmd if i)
-        proc = await create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL)
+        process = await create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL)
         await proc.communicate()
-        if proc.returncode != 0:
+        if process.returncode != 0:
             raise RuntimeError("ffmpeg")
 
         text = "Лови аптечку"
