@@ -42,12 +42,12 @@ class Bot(Client):
 class LayoutTranslator:
     def __init__(self) -> None:
         qwerty = (
-            "qwertyuiop[]asdfghjkl;'zxcvbnm,./"
-            'QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?'
+            """qwertyuiop[]asdfghjkl;'zxcvbnm,./"""
+            """QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?"""
         )
         russian = (
-            "йцукенгшщзхъфывапролджэячсмитьбю."
-            "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"
+            """йцукенгшщзхъфывапролджэячсмитьбю."""
+            """ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"""
         )
         self.table = "".maketrans(qwerty, russian)
 
