@@ -156,6 +156,13 @@ async def avatarka(ctx: Interaction, member: Member) -> None:
     await ctx.response.send_message(text)
 
 
+@bot.tree.command(description="Закодировать в base64")
+@app_commands.describe(text="Печатай текст")
+async def length(ctx: Interaction, text: str) -> None:
+    text = b64encode(text.encode()).decode()
+    await ctx.response.send_message(text)
+
+
 @bot.tree.command(description="Сделать QR код")
 @app_commands.describe(text="Текст QR кода")
 async def qr(ctx: Interaction, text: str) -> None:
