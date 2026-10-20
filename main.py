@@ -4,6 +4,7 @@
 
 from asyncio import create_subprocess_exec, subprocess, Runner
 from tempfile import NamedTemporaryFile
+from base64 import b64encode, b64decode
 from logging import basicConfig, ERROR
 from urllib.parse import quote_plus
 from os import environ, remove
