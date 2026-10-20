@@ -93,7 +93,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
 
         cmd = tuple(i for i in cmd if i)
         process = await create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL)
-        await proc.communicate()
+        await process.communicate()
         if process.returncode != 0:
             raise RuntimeError("ffmpeg")
 
