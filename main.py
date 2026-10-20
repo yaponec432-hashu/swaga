@@ -74,7 +74,6 @@ async def translate_from_crystalian(
 @app_commands.describe(file="Видео/анимация")
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.response.defer()
-
     with NamedTemporaryFile(suffix=".webm", delete=False) as temp_file:
         output_path = temp_file.name
     data = await file.read()
