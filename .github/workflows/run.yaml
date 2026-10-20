@@ -1,4 +1,4 @@
-name: progrev hammama
+name: Progrev hammama
 on:
   schedule:
     - cron: '39 * * * *'
