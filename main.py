@@ -165,7 +165,7 @@ async def length(ctx: Interaction, text: str) -> None:
 
 
 @bot.tree.command(description="Декодировать из base64")
-@app_commands.describe(text="Печатай текст")
+@app_commands.describe(base64_text="Печатай текст")
 async def length(ctx: Interaction, base64_text: str) -> None:
     try:
         text = b64decode(base64_text, validate=False).decode(errors="ignore")
