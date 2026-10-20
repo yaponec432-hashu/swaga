@@ -69,8 +69,8 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             raise RuntimeError("ffprobe")
 
         duration = float(stdout.decode())
-        target_duration = 2.9
-        speed = duration/target_duration if duration > target_duration else 1.0
+        target = 2.9
+        speed = duration/target if duration > target else 1.0
 
         cmd = (
             "ffmpeg", "-y",
