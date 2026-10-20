@@ -1,6 +1,7 @@
 name: progrev hammama
 on:
-  schedule: '39 * * * *'
+  schedule:
+    - cron: '39 * * * *'
 
 concurrency:
   group: ${{ github.workflow }}
