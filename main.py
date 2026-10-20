@@ -5,6 +5,7 @@
 from asyncio import create_subprocess_exec, subprocess, Runner
 from tempfile import NamedTemporaryFile
 from logging import basicConfig, ERROR
+from urllib.parse import quote_plus
 from os import environ, remove
 
 from uvloop import new_event_loop
@@ -122,6 +123,14 @@ async def ds_id(ctx: Interaction, member: Member) -> None:
 @app_commands.describe(member="Чел")
 async def avatarka(ctx: Interaction, member: Member) -> None:
     text = member.display_avatar
+    await ctx.response.send_message(text)
+
+
+@bot.tree.command(description="Сделать QR код")
+@app_commands.describe(text="Текст QR кода")
+async def qr(ctx: Interaction, text: str) -> None:
+    text = quote_plus(text)
+    text = "https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + text
     await ctx.response.send_message(text)
 
 
