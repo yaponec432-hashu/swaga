@@ -72,6 +72,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         target = 2.9
         speed = duration/target if duration > target else 1.0
 
+        bitrate = "352k"
         cmd = (
             "ffmpeg", "-y",
             "-v", "24",
@@ -79,9 +80,10 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-i", input_path,
             "-an",
             "-c:v", "libvpx-vp9",
-            "-minrate", "384k",
-            "-b:v", "384k",
-            "-maxrate", "384k",
+            "-minrate", bitrate,
+            "-b:v", bitrate,
+            "-maxrate", bitrate,
+            "-bufsize", bitrate,
             "-row-mt", "1",
             "-vf", f"setpts=PTS/{speed},scale=512:512,fps=30",
             "-pix_fmt", "yuva420p",
