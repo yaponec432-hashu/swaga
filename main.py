@@ -116,10 +116,10 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-b:v", bitrate,
             "-maxrate", bitrate,
             "-bufsize", bitrate,
-            "-row-mt", "1",
-            "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
-            "-fps_mode", "cfr",
             "-frame-parallel", "0",
+            "-row-mt", "1",
+            "-fps_mode", "cfr",
+            "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
             "-aspect", "1:1",
             "-g", "90",
             "--", output_path
