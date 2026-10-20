@@ -36,7 +36,35 @@ class Bot(Client):
             await self.tree.sync()
 
 
+class LayoutTranslator:
+    def __init__(self) -> None:
+        qwerty = (
+            "qwertyuiop[]asdfghjkl;'zxcvbnm,./"
+            'QWERTYUIOP{}ASDFGHJKL:"ZXCVBNM<>?'
+        )
+        russian = (
+            "йцукенгшщзхъфывапролджэячсмитьбю."
+            "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,"
+        )
+        self.table = "".maketrans(qwerty, russian)
+
+    def translate(self, text: str) -> str:
+        return text.translate(self.table)
+
+
 bot = Bot()
+translator = LayoutTranslator()
+
+
+@bot.tree.context_menu(name="Перевести с кристалийского")
+async def translate_from_crystalian(
+    ctx: Interaction,
+    message: Message
+) -> None:
+    text = message.jump_url + "\n"
+    message_text = message.content
+    text += translator.translate(message_text) if message_text else "[Пусто]"
+    await ctx.response.send_message(text)
 
 
 @bot.tree.command(description="Сделать файл тг стикера")
