@@ -163,6 +163,13 @@ async def length(ctx: Interaction, text: str) -> None:
     await ctx.response.send_message(text)
 
 
+@bot.tree.command(description="Декодировать из base64")
+@app_commands.describe(text="Печатай текст")
+async def length(ctx: Interaction, base64_text: str) -> None:
+    text = b64decode(base64_text, validate=False).decode(errors="ignore")
+    await ctx.response.send_message(text)
+
+
 @bot.tree.command(description="Сделать QR код")
 @app_commands.describe(text="Текст QR кода")
 async def qr(ctx: Interaction, text: str) -> None:
