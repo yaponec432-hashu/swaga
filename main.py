@@ -8,6 +8,7 @@ from base64 import b64encode, b64decode
 from logging import basicConfig, ERROR
 from urllib.parse import quote_plus
 from os import environ, remove
+from binascii import Error
 
 from uvloop import new_event_loop
 from discord import (
@@ -166,7 +167,10 @@ async def length(ctx: Interaction, text: str) -> None:
 @bot.tree.command(description="Декодировать из base64")
 @app_commands.describe(text="Печатай текст")
 async def length(ctx: Interaction, base64_text: str) -> None:
-    text = b64decode(base64_text, validate=False).decode(errors="ignore")
+    try:
+        text = b64decode(base64_text, validate=False).decode(errors="ignore")
+    except Error:
+        text = "Нормальный base64 печатай"
     await ctx.response.send_message(text)
 
 
