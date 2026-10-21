@@ -33,4 +33,4 @@ jobs:
           uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
-          BOT_SYNC_ENABLED: 1
+          BOT_SYNC_ENABLED: 0
