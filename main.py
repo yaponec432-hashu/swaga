@@ -159,14 +159,14 @@ async def avatarka(ctx: Interaction, member: Member) -> None:
 
 @bot.tree.command(description="Закодировать в base64")
 @app_commands.describe(text="Печатай текст")
-async def length(ctx: Interaction, text: str) -> None:
+async def base64_encode(ctx: Interaction, text: str) -> None:
     text = b64encode(text.encode()).decode()
     await ctx.response.send_message(text)
 
 
 @bot.tree.command(description="Декодировать из base64")
 @app_commands.describe(base64_text="Печатай текст")
-async def length(ctx: Interaction, base64_text: str) -> None:
+async def base64_decode(ctx: Interaction, base64_text: str) -> None:
     try:
         text = b64decode(base64_text, validate=False).decode(errors="ignore")
     except Error:
