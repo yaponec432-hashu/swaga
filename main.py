@@ -66,7 +66,7 @@ async def translate_from_crystalian(
 ) -> None:
     message_text = message.content
     text = message.jump_url + "\n"
-    text += translator.translate(message_text) if message_text else "[Пусто]"
+    text += translator.translate(message_text) if message_text else "> Пусто"
     await ctx.response.send_message(text)
 
 
