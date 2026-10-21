@@ -29,6 +29,7 @@ class Bot(Client):
     SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
 
     def __init__(self) -> None:
+        basicConfig(level=ERROR)
         intents = Intents.default()
         intents.message_content = True
         super().__init__(chunk_guilds_at_startup=False, intents=intents)
@@ -203,6 +204,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    basicConfig(level=ERROR)
     with Runner(loop_factory=new_event_loop) as runner:
         runner.run(main())
