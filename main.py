@@ -170,7 +170,9 @@ async def base64_encode(ctx: Interaction, text: str) -> None:
 async def base64_decode(ctx: Interaction, base64_text: str) -> None:
     try:
         text = b64decode(base64_text, validate=False).decode(errors="ignore")
-    except Error:
+        if not text:
+            raise RuntimeError("Empty")
+    except (RuntimeError, Error):
         text = "Нормальный base64 печатай"
     await ctx.response.send_message(text)
 
