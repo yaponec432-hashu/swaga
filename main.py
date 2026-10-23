@@ -81,6 +81,8 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         temp_file.write(data)
         input_path = temp_file.name
 
+        text = "**Ошибка, попробуй другой формат файла**\n"
+        sticker_file = {}
     try:
         process = await create_subprocess_exec(
             "ffprobe", 
@@ -147,12 +149,11 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         if process.returncode != 0:
             raise RuntimeError("ffmpeg 2")
 
-        text = "Лови аптечку"
         sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
         sticker_file = {"file": sticker_file}
-    except Exception as error:
-        text = "**Ошибка, попробуй другой формат файла**\n" + str(error)
-        sticker_file = {}
+        text = "Лови аптечку"
+    except Exception as exception:
+        text = text + str(exception)
     finally:
         remove(input_path)
         remove(output_path)
