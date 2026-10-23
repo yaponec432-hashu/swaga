@@ -132,7 +132,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             *cmd,
             "-pass", "1",
             "-f", "null",
-            "--", output_file
+            "--", "/dev/null"
         )
         await process.communicate()
         if process.returncode != 0:
