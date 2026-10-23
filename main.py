@@ -148,7 +148,8 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             raise RuntimeError("ffmpeg 2")
 
         text = "Лови аптечку"
-        sticker_file = {"file": File(output_path, filename=f"tg_{file.filename}.webm")}
+        sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
+        sticker_file = {"file": sticker_file}
     except Exception:
         text = "Обшибка, попробуй другой формат файла"
         sticker_file = {}
