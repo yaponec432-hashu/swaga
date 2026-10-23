@@ -73,7 +73,7 @@ async def translate_from_crystalian(
 @bot.tree.command(description="Сделать файл тг стикера")
 @app_commands.describe(file="Видео/анимация")
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
-    await ctx.response.defer()
+    #await ctx.response.defer()
     with NamedTemporaryFile(suffix=".webm", delete=False) as temp_file:
         output_path = temp_file.name
     data = await file.read()
@@ -156,7 +156,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         remove(input_path)
         remove(output_path)
         remove(output_path + "-0.log")
-    await ctx.followup.send(text, file=sticker_file)
+    await ctx.response.send_message(text, file=sticker_file)
 
 
 @bot.tree.command(description="Id чела")
