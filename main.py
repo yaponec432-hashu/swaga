@@ -8,7 +8,6 @@ from base64 import b64encode, b64decode
 from logging import basicConfig, ERROR
 from urllib.parse import quote_plus
 from os import environ, remove
-from binascii import Error
 
 from uvloop import new_event_loop
 from discord import (
@@ -131,13 +130,22 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
 
         process = await create_subprocess_exec(
             *cmd,
-            "-pass", "2",
-            "--", output_file,
-            stderr=subprocess.DEVNULL
+            "-pass", "1",
+            "-f", "null",
+            "--", output_file
         )
         await process.communicate()
         if process.returncode != 0:
-            raise RuntimeError("ffmpeg")
+            raise RuntimeError("ffmpeg 1")
+
+        process = await create_subprocess_exec(
+            *cmd,
+            "-pass", "2",
+            "--", output_file
+        )
+        await process.communicate()
+        if process.returncode != 0:
+            raise RuntimeError("ffmpeg 2")
 
         text = "Лови аптечку"
         sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
@@ -179,7 +187,7 @@ async def base64_decode(ctx: Interaction, base64_text: str) -> None:
         text = b64decode(base64_text, validate=False).decode(errors="ignore")
         if not text:
             raise RuntimeError("Empty")
-    except (RuntimeError, Error):
+    except Exception:
         text = "Нормальный base64 печатай"
     await ctx.response.send_message(text)
 
