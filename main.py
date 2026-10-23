@@ -148,15 +148,15 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             raise RuntimeError("ffmpeg 2")
 
         text = "Лови аптечку"
-        sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
+        sticker_file = {"file": File(output_path, filename=f"tg_{file.filename}.webm")}
     except Exception:
         text = "Обшибка, попробуй другой формат файла"
-        sticker_file = None
+        sticker_file = {}
     finally:
         remove(input_path)
         remove(output_path)
         remove(output_path + "-0.log")
-    await ctx.response.send_message(text, file=sticker_file)
+    await ctx.response.send_message(text, **sticker_file)
 
 
 @bot.tree.command(description="Id чела")
