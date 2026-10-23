@@ -124,7 +124,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
             "-aspect", "1:1",
             "-g", "90",
-            "-passlogfile", output_file
+            "-passlogfile", output_path
         )
         cmd = tuple(i for i in cmd if i)
 
