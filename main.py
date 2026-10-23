@@ -82,12 +82,6 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         input_path = temp_file.name
 
     try:
-        decoder_flag = decoder = ""
-        # Keep transparency
-        if file.filename.lower().endswith(".webm"):
-            decoder_flag = "-c:v"
-            decoder = "libvpx-vp9"
-
         process = await create_subprocess_exec(
             "ffprobe", 
             "-v", "24",
@@ -104,7 +98,13 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         target = 2.95
         speed = duration/target if duration > target else 1.0
 
+        decoder_flag = decoder = ""
         bitrate = "544k"
+        # Keep transparency
+        if file.filename.lower().endswith(".webm"):
+            decoder_flag = "-c:v"
+            decoder = "libvpx-vp9"
+
         cmd = (
             "ffmpeg", "-y",
             "-v", "24",
