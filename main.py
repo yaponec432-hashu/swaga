@@ -150,8 +150,8 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         text = "Лови аптечку"
         sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
         sticker_file = {"file": sticker_file}
-    except Exception:
-        text = "Обшибка, попробуй другой формат файла"
+    except Exception as error:
+        text = "**Ошибка, попробуй другой формат файла**\n" + error
         sticker_file = {}
     finally:
         remove(input_path)
