@@ -141,7 +141,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         process = await create_subprocess_exec(
             *cmd,
             "-pass", "2",
-            "--", output_file
+            "--", output_path
         )
         await process.communicate()
         if process.returncode != 0:
@@ -151,7 +151,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
         sticker_file = {"file": sticker_file}
     except Exception as error:
-        text = "**Ошибка, попробуй другой формат файла**\n" + error
+        text = "**Ошибка, попробуй другой формат файла**\n" + str(error)
         sticker_file = {}
     finally:
         remove(input_path)
