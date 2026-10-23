@@ -93,7 +93,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             stdout=subprocess.PIPE
         )
         stdout, _ = await process.communicate()
-        if process.returncode != 0:
+        if process.returncode:
             raise RuntimeError("ffprobe")
 
         duration = float(stdout.decode())
@@ -137,7 +137,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "--", "/dev/null"
         )
         await process.communicate()
-        if process.returncode != 0:
+        if process.returncode:
             raise RuntimeError("ffmpeg 1")
 
         process = await create_subprocess_exec(
@@ -146,7 +146,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "--", output_path
         )
         await process.communicate()
-        if process.returncode != 0:
+        if process.returncode:
             raise RuntimeError("ffmpeg 2")
 
         sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
