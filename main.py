@@ -102,7 +102,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             raise RuntimeError("ffprobe")
 
         duration = float(stdout.decode())
-        target = 2.9
+        target = 2.95
         speed = duration/target if duration > target else 1.0
 
         bitrate = "544k"
@@ -125,11 +125,16 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
             "-aspect", "1:1",
             "-g", "90",
-            "--", output_path
+            "-passlogfile", output_file
         )
-
         cmd = tuple(i for i in cmd if i)
-        process = await create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL)
+
+        process = await create_subprocess_exec(
+            *cmd,
+            "-pass", "2",
+            "--", output_file,
+            stderr=subprocess.DEVNULL
+        )
         await process.communicate()
         if process.returncode != 0:
             raise RuntimeError("ffmpeg")
@@ -140,8 +145,9 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         text = "Обшибка, попробуй другой формат файла"
         sticker_file = None
     finally:
-        remove(output_path)
         remove(input_path)
+        remove(output_path)
+        remove(output_path + "-0.log")
     await ctx.followup.send(text, file=sticker_file)
 
 
