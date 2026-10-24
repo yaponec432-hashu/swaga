@@ -22,9 +22,9 @@ jobs:
         with:
           python-version: '3.15'
 
-      - uses: astral-sh/setup-uv@v10.3.0
+      - uses: astral-sh/setup-uv@v10
         with:
-          version: "latest"
+          version: 'latest'
 
       - name: Run the bots
         run: |
