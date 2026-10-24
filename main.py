@@ -7,7 +7,8 @@ from tempfile import NamedTemporaryFile
 from base64 import b64encode, b64decode
 from logging import basicConfig, ERROR
 from urllib.parse import quote_plus
-from os import environ, remove
+from pathlib import Path
+from os import environ
 
 from uvloop import new_event_loop
 from discord import (
@@ -75,11 +76,12 @@ async def translate_from_crystalian(
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.response.defer()
     with NamedTemporaryFile(suffix=".webm", delete=False) as temp_file:
-        output_path = temp_file.name
+        output = Path(temp_file.name)
+        log = Path(temp_file.name + "-0.log")
     data = await file.read()
     with NamedTemporaryFile(delete=False) as temp_file:
         temp_file.write(data)
-        input_path = temp_file.name
+        input = Path(temp_file.name)
 
         text = "**Ошибка, попробуй другой формат файла**\n"
         sticker_file = {}
@@ -89,7 +91,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-v", "24",
             "-show_entries", "format=duration",
             "-of", "default=noprint_wrappers=1:nokey=1",
-            "-i", input_path,
+            "-i", str(input),
             stdout=subprocess.PIPE
         )
         stdout, _ = await process.communicate()
@@ -111,7 +113,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "ffmpeg", "-y",
             "-v", "24",
             decoder_flag, decoder,
-            "-i", input_path,
+            "-i", str(input),
             "-an",
             "-c:v", "libvpx-vp9",
             "-minrate", bitrate,
@@ -126,7 +128,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
             "-aspect", "1:1",
             "-g", "90",
-            "-passlogfile", output_path
+            "-passlogfile", str(output)
         )
         cmd = tuple(i for i in cmd if i)
 
@@ -143,21 +145,21 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         process = await create_subprocess_exec(
             *cmd,
             "-pass", "2",
-            "--", output_path
+            "--", str(output)
         )
         await process.communicate()
         if process.returncode:
             raise RuntimeError("ffmpeg 2")
 
-        sticker_file = File(output_path, filename=f"tg_{file.filename}.webm")
+        sticker_file = File(output, filename=f"tg_{file.filename}.webm")
         sticker_file = {"file": sticker_file}
         text = "Лови аптечку"
     except Exception as exception:
         text = text + str(exception)
     finally:
-        remove(input_path)
-        remove(output_path)
-        remove(output_path + "-0.log")
+        input.unlink(missing_ok=True)
+        output.unlink(missing_ok=True)
+        log.unlink(missing_ok=True)
     await ctx.followup.send(text, **sticker_file)
 
 
