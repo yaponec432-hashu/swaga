@@ -1,7 +1,6 @@
 #yml
 name: Progrev hammama
 on:
-  workflow_dispatch:
   schedule:
     - cron: "44 * * * *"
 
@@ -22,7 +21,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v7
         with:
-          python-version: "3.15"
+          python-version: "3.15t"
 
       - name: Install pkgs
         run: |
