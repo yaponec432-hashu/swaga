@@ -103,7 +103,6 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
         speed = duration/target if duration > target else 1.0
 
         decoder_flag = decoder = ""
-        bitrate = "544k"
         # Keep transparency
         if file.filename.lower().endswith(".webm"):
             decoder_flag = "-c:v"
@@ -116,10 +115,9 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-i", str(input),
             "-an",
             "-c:v", "libvpx-vp9",
-            "-minrate", bitrate,
-            "-b:v", bitrate,
-            "-maxrate", bitrate,
-            "-bufsize", bitrate,
+            "-b:v", "640k",
+            "-maxrate", "672k",
+            "-bufsize", "1280k",
             "-auto-alt-ref", "0",
             "-frame-parallel", "0",
             "-cpu-used", "2",
