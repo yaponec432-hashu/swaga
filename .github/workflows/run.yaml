@@ -24,14 +24,14 @@ jobs:
         with:
           python-version: "3.15"
 
-      - uses: astral-sh/setup-uv@v10
-        with:
-          version: "latest"
-
-      - name: Run the bots
+      - name: Install pkgs
         run: |
           sudo apt-get update
           sudo apt-get install ffmpeg
+          python3 -m pip install uv
+
+      - name: Vernite mamu pticu
+        run: |
           uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
