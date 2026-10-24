@@ -118,6 +118,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-b:v", "640k",
             "-maxrate", "672k",
             "-bufsize", "1280k",
+            "-overshoot-pct", "0",
             "-auto-alt-ref", "0",
             "-frame-parallel", "0",
             "-cpu-used", "2",
