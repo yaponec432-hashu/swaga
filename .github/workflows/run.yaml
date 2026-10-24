@@ -1,7 +1,8 @@
+#yml
 name: Progrev hammama
 on:
   schedule:
-    - cron: '44 * * * *'
+    - cron: "44 * * * *"
 
 concurrency:
   group: ${{ github.workflow }}
@@ -20,11 +21,11 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v7
         with:
-          python-version: '3.15'
+          python-version: "3.15"
 
       - uses: astral-sh/setup-uv@v10
         with:
-          version: 'latest'
+          version: "latest"
 
       - name: Run the bots
         run: |
