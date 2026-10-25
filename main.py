@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
-from asyncio import create_subprocess_exec, subprocess, Runner
+from asyncio import create_subprocess_exec, subprocess, create_task, Runner, sleep
 from tempfile import NamedTemporaryFile
 from base64 import b64encode, b64decode
 from logging import basicConfig, ERROR
@@ -221,9 +221,18 @@ async def check_sync(ctx: Interaction) -> None:
     await ctx.response.send_message(text)
 
 
+async def stop(delay: int) -> None:
+    await sleep(delay)
+    await bot.close()
+
+
 async def main() -> None:
     async with bot:
-       await bot.start(environ["MASTER_TOKEN"])
+        timer = create_task(stop(300))
+        try:
+            await bot.start(environ["MASTER_TOKEN"])
+        finally:
+            timer.cancel()
 
 
 if __name__ == "__main__":
