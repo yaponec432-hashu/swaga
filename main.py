@@ -10,8 +10,8 @@ from pathlib import Path
 from os import environ
 from asyncio import (
     create_subprocess_exec,
-    subprocess,
     create_task,
+    subprocess,
     Runner,
     sleep
 )
