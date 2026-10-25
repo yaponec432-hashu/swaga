@@ -236,5 +236,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    with Runner(loop_factory=new_event_loop) as runner:
+    with Runner() as runner:
         runner.run(main())
