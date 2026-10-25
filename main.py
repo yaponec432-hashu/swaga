@@ -92,6 +92,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-show_entries", "format=duration",
             "-of", "default=noprint_wrappers=1:nokey=1",
             "-i", str(input),
+            stdin=subprocess.DEVNULL,
             stdout=subprocess.PIPE
         )
         stdout, _ = await process.communicate()
@@ -109,7 +110,9 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             decoder = "libvpx-vp9"
 
         cmd = (
-            "ffmpeg", "-y",
+            "ffmpeg",
+            "-nostdin",
+            "-y",
             "-v", "24",
             decoder_flag, decoder,
             "-i", str(input),
