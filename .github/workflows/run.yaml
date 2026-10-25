@@ -1,6 +1,7 @@
 #yml
 name: Progrev hammama
 on:
+  workflow_dispatch:
   schedule:
     - cron: "44 * * * *"
 
