@@ -221,17 +221,17 @@ async def check_sync(ctx: Interaction) -> None:
     await ctx.response.send_message(text)
 
 
-async def stop(delay: int) -> None:
-    await sleep(delay)
+async def stop_in(seconds: int) -> None:
+    await sleep(seconds)
     await bot.close()
 
 
 async def main() -> None:
     async with bot:
-        create_task(stop(300))
+        create_task(stop_in(21300))
         await bot.start(environ["MASTER_TOKEN"])
 
 
 if __name__ == "__main__":
-    with Runner() as runner:
+    with Runner(new_event_loop) as runner:
         runner.run(main())
