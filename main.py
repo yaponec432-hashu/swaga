@@ -228,11 +228,8 @@ async def stop(delay: int) -> None:
 
 async def main() -> None:
     async with bot:
-        timer = create_task(stop(300))
-        try:
-            await bot.start(environ["MASTER_TOKEN"])
-        finally:
-            timer.cancel()
+        create_task(stop(300))
+        await bot.start(environ["MASTER_TOKEN"])
 
 
 if __name__ == "__main__":
