@@ -2,13 +2,19 @@
 # SPDX-License-Identifier: 0BSD
 """A discord bot."""
 
-from asyncio import create_subprocess_exec, subprocess, create_task, Runner, sleep
 from tempfile import NamedTemporaryFile
 from base64 import b64encode, b64decode
 from logging import basicConfig, ERROR
 from urllib.parse import quote_plus
 from pathlib import Path
 from os import environ
+from asyncio import (
+    create_subprocess_exec,
+    subprocess,
+    create_task,
+    Runner,
+    sleep
+)
 
 from uvloop import new_event_loop
 from discord import (
