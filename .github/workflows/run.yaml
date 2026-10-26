@@ -32,7 +32,7 @@ jobs:
 
       - name: Check pending
         run: |
-          pending="$(gh api repos/${REPO}/actions/workflows/${WORKFLOW_FILE}/runs?status=pending --jq '.total_count // 0')"
+          pending="$(gh api repos/${REPO}/actions/workflows/run.yaml/runs?status=pending --jq '.total_count // 0')"
           if ((pending < 2)); then
             echo 'ok=true' >> "${GITHUB_ENV}"
           else
@@ -40,7 +40,6 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WORKFLOW_FILE: ${{ github.workflow_ref }}
           REPO: ${{ github.repository }}
 
       - name: Vernite mamu pticu
