@@ -8,6 +8,7 @@ on:
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: read
@@ -30,20 +31,7 @@ jobs:
           sudo apt-get install ffmpeg
           python3 -m pip install uv
 
-      - name: Check pending
-        run: |
-          pending="$(gh api repos/${REPO}/actions/workflows/run.yaml/runs?status=pending --jq .total_count)"
-          if ((pending < 2)); then
-            echo 'ok=true' >> "${GITHUB_ENV}"
-          else
-            echo 'ok=false' >> "${GITHUB_ENV}"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-
       - name: Vernite mamu pticu
-        if: env.ok
         run: uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
