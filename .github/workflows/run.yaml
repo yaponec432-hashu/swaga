@@ -30,9 +30,22 @@ jobs:
           sudo apt-get install ffmpeg
           python3 -m pip install uv
 
-      - name: Vernite mamu pticu
+      - name: Check pending
         run: |
-          uv run ./main.py
+          pending="$(gh api repos/${REPO}/actions/workflows/${WORKFLOW_FILE}/runs?status=pending --jq '.total_count // 0')"
+          if ((pending < 2)); then
+            echo 'ok=true' >> "${GITHUB_ENV}"
+          else
+            echo 'ok=false' >> "${GITHUB_ENV}"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW_FILE: ${{ github.workflow_ref }}
+          REPO: ${{ github.repository }}
+
+      - name: Vernite mamu pticu
+        if: env.ok
+        run: uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
           BOT_SYNC_ENABLED: 0
