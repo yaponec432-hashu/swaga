@@ -26,18 +26,16 @@ jobs:
         with:
           python-version: "3.15"
 
+      - name: Install uv
+        # v10.3.2
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e
+
       - name: Install ffmpeg
         # v1.6.3
         uses: awalsh128/cache-apt-pkgs-action@553a35bb8ebd9fcabcb1c9451aa4c98e1b4ca8a9
         with:
           packages: ffmpeg
           version: 1.0
-
-      - name: Install pkgs
-        run: |
-          sudo apt-get update
-          sudo apt-get install ffmpeg
-          python3 -m pip install uv
 
       - name: Vernite mamu pticu
         run: uv run ./main.py
