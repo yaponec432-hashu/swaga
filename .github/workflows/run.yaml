@@ -25,6 +25,11 @@ jobs:
         with:
           python-version: "3.15"
 
+      - uses: awalsh128/cache-apt-pkgs-action@v1.6.3
+        with:
+          packages: ffmpeg
+          version: 1.0
+
       - name: Install pkgs
         run: |
           sudo apt-get update
