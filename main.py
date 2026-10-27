@@ -234,7 +234,7 @@ async def stop_in(seconds: int) -> None:
 
 async def main() -> None:
     async with bot:
-        create_task(stop_in(21300))
+        create_task(stop_in(20700))
         await bot.start(environ["MASTER_TOKEN"])
 
 
