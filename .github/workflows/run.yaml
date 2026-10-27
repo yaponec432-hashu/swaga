@@ -36,7 +36,7 @@ jobs:
           version: 1.0
 
       - name: Vernite mamu pticu
-        run: apt search ffmpeg; apt update; apt search ffmpeg #uv run ./main.py
+        run: sudo apt update >/dev/null; apt search ^ffmpeg #uv run ./main.py
         env:
           MASTER_TOKEN: ${{ secrets.MASTER_TOKEN }}
           BOT_SYNC_ENABLED: 0
