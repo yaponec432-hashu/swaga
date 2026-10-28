@@ -4,16 +4,19 @@
 set -e -o pipefail
 
 download() {
+    local file="${1}"
+
     local link
     link='https://raw.githubusercontent.com/Sekai-World/uptime-monitor/master'
     link+='/history/summary.json'
-    local file='./README.md'
 
     echo '###### sekai.best' > "${file}"
     curl -f "${link}" | grep -m1 '"uptime"' >> "${file}"
 }
 
 commit() {
+    local file="${1}"
+
     git config user.name github-actions
     git config user.email github-actions@github.com
     git add "${file}"
@@ -22,8 +25,9 @@ commit() {
 }
 
 main() {
-    download
-    commit
+    local file='./README.md'
+    download "${file}"
+    commit "${file}"
 }
 
 main
