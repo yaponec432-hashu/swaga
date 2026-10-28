@@ -3,7 +3,7 @@
 # Store uptime
 set -e -o pipefail
 
-main() {
+download() {
     local link
     link='https://raw.githubusercontent.com/Sekai-World/uptime-monitor/master'
     link+='/history/summary.json'
@@ -11,12 +11,19 @@ main() {
 
     echo '###### sekai.best' > "${file}"
     curl -f "${link}" | grep -m1 '"uptime"' >> "${file}"
+}
 
+commit() {
     git config user.name github-actions
     git config user.email github-actions@github.com
     git add "${file}"
     git commit -m "$(date -I)"
     git push
+}
+
+main() {
+    download
+    commit
 }
 
 main
