@@ -1,4 +1,4 @@
-name: Uptime
+name: Store uptime
 on:
   schedule:
     - cron: '37 13 15 * *'
