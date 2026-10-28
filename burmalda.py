@@ -167,14 +167,14 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.followup.send(text, **sticker_file)
 
 
-@bot.tree.command(description="Id чела")
+@pudel.tree.command(description="Id чела")
 @app_commands.describe(member="Чел")
 async def ds_id(ctx: Interaction, member: Member) -> None:
     text = f"```{member.id}```"
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Аватарка чела")
+@pudel.tree.command(description="Аватарка чела")
 @app_commands.describe(member="Чел")
 async def avatarka(ctx: Interaction, member: Member) -> None:
     text = member.display_avatar
