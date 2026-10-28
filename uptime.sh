@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: 0BSD
 # Store uptime
-set -e
+set -e -o pipefail
 
 main() {
     local link
