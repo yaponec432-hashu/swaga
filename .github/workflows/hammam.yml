@@ -11,7 +11,7 @@ concurrency:
   queue: max
 
 jobs:
-  burmalda:
+  hammam:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
