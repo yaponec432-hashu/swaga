@@ -10,7 +10,7 @@ main() {
     local file='./README.md'
 
     echo '###### sekai.best' > "${file}"
-    curl -f "${link}" | grep -m1 uptimeMonth >> "${file}"
+    curl -f "${link}" | grep -m1 '"uptime"' >> "${file}"
 
     git config user.name github-actions
     git config user.email github-actions@github.com
