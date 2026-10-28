@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: 0BSD
-"""A discord bot."""
+"""Uluchsheniy hammam."""
 
 from asyncio import create_subprocess_exec, create_task, subprocess, sleep
 from tempfile import NamedTemporaryFile
@@ -24,9 +24,8 @@ from discord import (
 )
 
 
-class Bot(Client):
+class MamaPtica(Client):
     user: ClientUser
-    SYNC_ENABLED = int(environ["BOT_SYNC_ENABLED"])
 
     def __init__(self) -> None:
         basicConfig(level=ERROR)
@@ -34,9 +33,10 @@ class Bot(Client):
         intents.message_content = True
         super().__init__(chunk_guilds_at_startup=False, intents=intents)
         self.tree = app_commands.CommandTree(self)
+        self.sync = bool(int(environ["SYNC"]))
 
     async def setup_hook(self) -> None:
-        if self.SYNC_ENABLED:
+        if self.sync:
             await self.tree.sync()
 
 
@@ -56,11 +56,11 @@ class LayoutTranslator:
         return text.translate(self.table)
 
 
-bot = Bot()
+pudel = MamaPtica()
 translator = LayoutTranslator()
 
 
-@bot.tree.context_menu(name="Перевести с кристалийского")
+@pudel.tree.context_menu(name="Перевести с кристалийского")
 async def translate_from_crystalian(
     ctx: Interaction,
     message: Message
@@ -71,7 +71,7 @@ async def translate_from_crystalian(
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Сделать файл тг стикера")
+@pudel.tree.command(description="Сделать файл тг стикера")
 @app_commands.describe(file="Видео / анимация")
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.response.defer()
@@ -181,14 +181,14 @@ async def avatarka(ctx: Interaction, member: Member) -> None:
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Закодировать в base64")
+@pudel.tree.command(description="Закодировать в base64")
 @app_commands.describe(text="Печатай текст")
 async def base64_encode(ctx: Interaction, text: str) -> None:
     text = f"```{b64encode(text.encode()).decode()}```"
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Декодировать из base64")
+@pudel.tree.command(description="Декодировать из base64")
 @app_commands.describe(base64_text="Печатай текст")
 async def base64_decode(ctx: Interaction, base64_text: str) -> None:
     try:
@@ -200,7 +200,7 @@ async def base64_decode(ctx: Interaction, base64_text: str) -> None:
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Сделать QR код")
+@pudel.tree.command(description="Сделать QR код")
 @app_commands.describe(text="Текст QR кода")
 async def qr(ctx: Interaction, text: str) -> None:
     text = (
@@ -210,28 +210,28 @@ async def qr(ctx: Interaction, text: str) -> None:
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Посчитать длину строки")
+@pudel.tree.command(description="Посчитать длину строки")
 @app_commands.describe(text="3 хаммама прогревай быстрей")
 async def length(ctx: Interaction, text: str) -> None:
     text = len(text)
     await ctx.response.send_message(text)
 
 
-@bot.tree.command(description="Проверить синхронизацию")
+@pudel.tree.command(description="Проверить синхронизацию")
 async def check_sync(ctx: Interaction) -> None:
-    text = "Ага" if bot.SYNC_ENABLED else "Нет нихуя"
+    text = "Ага" if pudel.sync else "Нет нихуя"
     await ctx.response.send_message(text)
 
 
 async def stop_in(seconds: int) -> None:
     await sleep(seconds)
-    await bot.close()
+    await pudel.close()
 
 
 async def main() -> None:
-    async with bot:
+    async with pudel:
         create_task(stop_in(20700))
-        await bot.start(environ["MASTER_TOKEN"])
+        await pudel.start(environ["MASTER_TOKEN"])
 
 
 if __name__ == "__main__":
