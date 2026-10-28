@@ -126,7 +126,6 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-overshoot-pct", "0",
             "-auto-alt-ref", "0",
             "-frame-parallel", "0",
-            "-cpu-used", "2",
             "-row-mt", "1",
             "-fps_mode", "cfr",
             "-vf", f"setpts=PTS/{speed},format=yuva420p,scale=512:512,fps=30",
@@ -148,6 +147,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
 
         process = await create_subprocess_exec(
             *cmd,
+            "-cpu-used", "2",
             "-pass", "2",
             "--", str(output)
         )
