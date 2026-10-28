@@ -230,8 +230,8 @@ async def stop_in(seconds: int) -> None:
 
 async def main() -> None:
     async with pudel:
-        create_task(stop_in(20700))
-        await pudel.start(environ["MASTER_TOKEN"])
+        create_task(stop_in(20400))
+        await pudel.start(environ["CHEMODAN"])
 
 
 if __name__ == "__main__":
