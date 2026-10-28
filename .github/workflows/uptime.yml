@@ -1,0 +1,17 @@
+name: Uptime
+on:
+  schedule:
+    - cron: '40 15 14 * *'
+
+permissions:
+  contents: write
+
+jobs:
+  save-uptime:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Save uptime
+        run: bash ./uptime.sh
