@@ -109,6 +109,7 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             decoder_flag = "-c:v"
             decoder = "libvpx-vp9"
 
+        bitrate = 448
         cmd = (
             "ffmpeg",
             "-nostdin",
@@ -118,9 +119,10 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
             "-i", str(input),
             "-an",
             "-c:v", "libvpx-vp9",
-            "-b:v", "640k",
-            "-maxrate", "672k",
-            "-bufsize", "1280k",
+            "-minrate", f"{bitrate}k",
+            "-b:v", f"{bitrate}k",
+            "-maxrate", f"{bitrate}k",
+            "-bufsize", f"{bitrate*2}k",,
             "-overshoot-pct", "0",
             "-auto-alt-ref", "0",
             "-frame-parallel", "0",
