@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: 0BSD
-# Save uptime
+# Store uptime
 set -e
 
 main() {
