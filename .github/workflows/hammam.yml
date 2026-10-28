@@ -1,3 +1,5 @@
+%YAML 1.2
+---
 name: Progrev hammama
 on:
   schedule:
@@ -34,3 +36,4 @@ jobs:
         env:
           CHEMODAN: ${{ secrets.CHEMODAN }}
           SYNC: 0
+...
