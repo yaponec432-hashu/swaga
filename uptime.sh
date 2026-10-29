@@ -10,8 +10,10 @@ download() {
     link='https://raw.githubusercontent.com/Sekai-World/uptime-monitor/master'
     link+='/history/summary.json'
 
-    echo '###### sekai.best' > "${file}"
+    echo '###### sekai.best\n' > "${file}"
+    echo '```' > "${file}"
     curl -f "${link}" | grep -m1 '"uptime"' >> "${file}"
+    echo '```' > "${file}"
 }
 
 commit() {
