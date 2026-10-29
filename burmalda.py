@@ -56,11 +56,11 @@ class LayoutTranslator:
         return text.translate(self.table)
 
 
-pudel = MamaPtica()
+burmalda = MamaPtica()
 translator = LayoutTranslator()
 
 
-@pudel.tree.context_menu(name="Перевести с кристалийского")
+@burmalda.tree.context_menu(name="Перевести с кристалийского")
 async def translate_from_crystalian(
     ctx: Interaction,
     message: Message
@@ -71,7 +71,7 @@ async def translate_from_crystalian(
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Сделать файл тг стикера")
+@burmalda.tree.command(description="Сделать файл тг стикера")
 @app_commands.describe(file="Видео / анимация")
 async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.response.defer()
@@ -167,28 +167,28 @@ async def tg_sticker(ctx: Interaction, file: Attachment) -> None:
     await ctx.followup.send(text, **sticker_file)
 
 
-@pudel.tree.command(description="Id чела")
+@burmalda.tree.command(description="Id чела")
 @app_commands.describe(member="Чел")
 async def ds_id(ctx: Interaction, member: Member) -> None:
     text = f"```{member.id}```"
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Аватарка чела")
+@burmalda.tree.command(description="Аватарка чела")
 @app_commands.describe(member="Чел")
 async def avatarka(ctx: Interaction, member: Member) -> None:
     text = member.display_avatar
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Закодировать в base64")
+@burmalda.tree.command(description="Закодировать в base64")
 @app_commands.describe(text="Печатай текст")
 async def base64_encode(ctx: Interaction, text: str) -> None:
     text = f"```{b64encode(text.encode()).decode()}```"
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Декодировать из base64")
+@burmalda.tree.command(description="Декодировать из base64")
 @app_commands.describe(base64_text="Печатай текст")
 async def base64_decode(ctx: Interaction, base64_text: str) -> None:
     try:
@@ -200,7 +200,7 @@ async def base64_decode(ctx: Interaction, base64_text: str) -> None:
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Сделать QR код")
+@burmalda.tree.command(description="Сделать QR код")
 @app_commands.describe(text="Текст QR кода")
 async def qr(ctx: Interaction, text: str) -> None:
     text = (
@@ -210,28 +210,28 @@ async def qr(ctx: Interaction, text: str) -> None:
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Посчитать длину строки")
+@burmalda.tree.command(description="Посчитать длину строки")
 @app_commands.describe(text="3 хаммама прогревай быстрей")
 async def length(ctx: Interaction, text: str) -> None:
     text = len(text)
     await ctx.response.send_message(text)
 
 
-@pudel.tree.command(description="Проверить синхронизацию")
+@burmalda.tree.command(description="Проверить синхронизацию")
 async def check_sync(ctx: Interaction) -> None:
-    text = "Ага" if pudel.sync else "Нет нихуя"
+    text = "Ага" if burmalda.sync else "Нет нихуя"
     await ctx.response.send_message(text)
 
 
 async def stop_in(seconds: int) -> None:
     await sleep(seconds)
-    await pudel.close()
+    await burmalda.close()
 
 
 async def main() -> None:
-    async with pudel:
+    async with burmalda:
         create_task(stop_in(20400))
-        await pudel.start(environ["CHEMODAN"])
+        await burmalda.start(environ["CHEMODAN"])
 
 
 if __name__ == "__main__":
