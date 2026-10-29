@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  store_uptime:
+  store-uptime:
     runs-on: ubuntu-slim
     steps:
       - name: Checkout
