@@ -11,9 +11,9 @@ download() {
     link+='/history/summary.json'
 
     echo '###### sekai.best\n' > "${file}"
-    echo '```' > "${file}"
+    echo '```' >> "${file}"
     curl -f "${link}" | grep -m1 '"uptime"' >> "${file}"
-    echo '```' > "${file}"
+    echo '```' >> "${file}"
 }
 
 commit() {
