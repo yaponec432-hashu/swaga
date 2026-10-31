@@ -2,7 +2,7 @@
 name: Progrev hammama
 on:
   schedule:
-    - cron: '21 21,2,7,11,16 * * *'
+    - cron: '21 23,2,5,8,11,14,17,20 * * *'
 
 permissions:
   contents: read
